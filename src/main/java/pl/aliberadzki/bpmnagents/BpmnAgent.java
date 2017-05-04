@@ -4,14 +4,10 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.EventDefinition;
-import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import pl.aliberadzki.bpmnagents.behaviours.MsgStartBehaviour;
 import pl.aliberadzki.bpmnagents.behaviours.StartBehaviour;
 import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
-import pl.aliberadzki.bpmnagents.behaviours.TimerStartBehaviour;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -39,10 +35,8 @@ public class BpmnAgent extends Agent {
 
     private void initStartEventListeners()
     {
-        Process process = this.getProcess();
-        for (StartEvent startEvent : getStartEvent(process)) {
-            addStartEventListener(startEvent);
-        }
+        getStartEvent(this.getProcess())
+                .forEach(this::addStartEventListener);
     }
 
     private void addStartEventListener(StartEvent startEvent) {
