@@ -9,7 +9,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class MsgStartBehaviour extends SimpleBehaviour {
+public class MsgStartBehaviour extends SimpleBehaviour implements StartBehaviour{
 
     private boolean done = false;
 

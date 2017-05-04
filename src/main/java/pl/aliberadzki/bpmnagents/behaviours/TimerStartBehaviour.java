@@ -7,7 +7,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class TimerStartBehaviour extends TickerBehaviour {
+public class TimerStartBehaviour extends TickerBehaviour implements StartBehaviour{
 
     private boolean completed = false;
 

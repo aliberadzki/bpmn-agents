@@ -9,6 +9,7 @@ import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.behaviours.MsgStartBehaviour;
+import pl.aliberadzki.bpmnagents.behaviours.StartBehaviour;
 import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
 import pl.aliberadzki.bpmnagents.behaviours.TimerStartBehaviour;
 
@@ -47,13 +48,20 @@ public class BpmnAgent extends Agent {
     private void addStartEventListener(StartEvent startEvent) {
         Behaviour behaviour = StartEventFactory.create(startEvent, this);
         if(behaviour == null) return;
-        this.startBehaviours.add(behaviour);
         this.addBehaviour(behaviour);
     }
 
     public void cleanStartEventBehaviours()
     {
         this.startBehaviours.forEach(this::removeBehaviour);
+    }
+
+    @Override
+    public void addBehaviour(Behaviour b) {
+        super.addBehaviour(b);
+        if(b instanceof StartBehaviour) {
+            this.startBehaviours.add(b);
+        }
     }
 
     private Process getProcess()
