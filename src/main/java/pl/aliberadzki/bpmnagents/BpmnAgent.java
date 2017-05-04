@@ -28,26 +28,7 @@ public class BpmnAgent extends Agent {
     {
         this.bpdName = (String) getArguments()[0];
         this.participantId = (String) getArguments()[1];
-
-
         this.initStartEventListeners();
-    }
-
-    private void initStartEventListeners()
-    {
-        getStartEvent(this.getProcess())
-                .forEach(this::addStartEventListener);
-    }
-
-    private void addStartEventListener(StartEvent startEvent) {
-        Behaviour behaviour = StartEventFactory.create(startEvent, this);
-        if(behaviour == null) return;
-        this.addBehaviour(behaviour);
-    }
-
-    public void cleanStartEventBehaviours()
-    {
-        this.startBehaviours.forEach(this::removeBehaviour);
     }
 
     @Override
@@ -58,13 +39,15 @@ public class BpmnAgent extends Agent {
         }
     }
 
-    private Process getProcess()
+    public void cleanStartEventBehaviours()
     {
-        InputStream bpdStream = getClass().getClassLoader().getResourceAsStream(bpdName + ".bpmn");
-        BpmnModelInstance modelInstance = bpdStream!=null ? Bpmn.readModelFromStream(bpdStream) : Bpmn.createEmptyModel();
-        String processRef = modelInstance.getModelElementById(participantId).getAttributeValue("processRef");
+        this.startBehaviours.forEach(this::removeBehaviour);
+    }
 
-        return modelInstance.getModelElementById(processRef);
+    private void initStartEventListeners()
+    {
+        getStartEvent(this.getProcess())
+                .forEach(this::addStartEventListener);
     }
 
     private Collection<StartEvent> getStartEvent(Process process)
@@ -73,5 +56,27 @@ public class BpmnAgent extends Agent {
                 .filter(StartEvent.class::isInstance)
                 .map(StartEvent.class::cast)
                 .collect(Collectors.toList());
+    }
+
+    private Process getProcess()
+    {
+        InputStream bpdStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream(bpdName + ".bpmn");
+        BpmnModelInstance modelInstance = bpdStream!=null
+                ? Bpmn.readModelFromStream(bpdStream)
+                : Bpmn.createEmptyModel();
+        String processRef = modelInstance
+                .getModelElementById(participantId)
+                .getAttributeValue("processRef");
+
+        return modelInstance.getModelElementById(processRef);
+    }
+
+    private void addStartEventListener(StartEvent startEvent)
+    {
+        Behaviour behaviour = StartEventFactory.create(startEvent, this);
+        if(behaviour == null) return;
+        this.addBehaviour(behaviour);
     }
 }
