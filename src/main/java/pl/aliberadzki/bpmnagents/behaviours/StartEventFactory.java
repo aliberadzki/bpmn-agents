@@ -15,10 +15,10 @@ public class StartEventFactory {
         for(EventDefinition ed : event.getEventDefinitions()) {
             String eventType = ed.getElementType().getTypeName();
             if(eventType.equals("messageEventDefinition")) {
-                behaviour = new MsgStartBehaviour(agent);
+                behaviour = new MsgStartBehaviour(agent, event);
             }
             else if(eventType.equals("timerEventDefinition")) {
-                behaviour = new TimerStartBehaviour(agent, 20000);
+                behaviour = new TimerStartBehaviour(agent, event);
             }
         }
         return behaviour;

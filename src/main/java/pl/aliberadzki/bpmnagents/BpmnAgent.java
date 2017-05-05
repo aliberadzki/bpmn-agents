@@ -2,10 +2,14 @@ package pl.aliberadzki.bpmnagents;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.ThreadedBehaviourFactory;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Process;
+import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
+import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
 import pl.aliberadzki.bpmnagents.behaviours.StartBehaviour;
 import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
 
@@ -22,6 +26,8 @@ public class BpmnAgent extends Agent {
     private String participantId;
 
     private Collection<Behaviour> startBehaviours = new ArrayList<>();
+    private Collection<SequenceFlow> activeFlows = new ArrayList<>();
+    private Collection<SequenceFlow> finishedFlows = new ArrayList<>();
 
     @Override
     protected void setup()
@@ -79,5 +85,24 @@ public class BpmnAgent extends Agent {
         Behaviour behaviour = StartEventFactory.create(startEvent, this);
         if(behaviour == null) return;
         this.addBehaviour(behaviour);
+    }
+
+    public void markAsActive(Collection<SequenceFlow> sequenceFlows)
+    {
+        activeFlows.addAll(sequenceFlows);
+    }
+
+    public boolean isActive(SequenceFlow sequenceFlow) {
+        return activeFlows.contains(sequenceFlow);
+    }
+
+    public void finish(SequenceFlow flow)
+    {
+        this.activeFlows.removeIf(flow1 -> flow1.equals(flow));
+        this.finishedFlows.add(flow);
+    }
+
+    public void scheduleActivity(FlowNode flowNode) {
+        this.addBehaviour(ActivityFactory.create(flowNode, this));
     }
 }

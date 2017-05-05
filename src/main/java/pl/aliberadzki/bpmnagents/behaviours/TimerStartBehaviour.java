@@ -2,6 +2,7 @@ package pl.aliberadzki.bpmnagents.behaviours;
 
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
+import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
 /**
@@ -9,10 +10,11 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  */
 public class TimerStartBehaviour extends TickerBehaviour implements StartBehaviour{
 
-    private boolean completed = false;
+    private StartEvent event;
 
-    public TimerStartBehaviour(BpmnAgent a, long period) {
-        super(a, period);
+    public TimerStartBehaviour(BpmnAgent a, StartEvent event) {
+        super(a, 20000);
+        this.event = event;
     }
 
     @Override
@@ -20,5 +22,7 @@ public class TimerStartBehaviour extends TickerBehaviour implements StartBehavio
         System.out.println("TIMER START BEHAVIOUR FINISHED");
         this.stop();
         ((BpmnAgent)myAgent).cleanStartEventBehaviours();
+        //TODO activate outgoing route
+//        event.getOutgoing().iterator().next()
     }
 }
