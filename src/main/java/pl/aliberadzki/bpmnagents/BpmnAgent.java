@@ -29,6 +29,7 @@ public class BpmnAgent extends Agent {
         this.bpdName = (String) getArguments()[0];
         this.participantId = (String) getArguments()[1];
         this.initStartEventListeners();
+        //TODO init intermediate start events WHEN process started
     }
 
     @Override

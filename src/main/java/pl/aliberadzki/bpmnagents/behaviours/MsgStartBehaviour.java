@@ -24,6 +24,7 @@ public class MsgStartBehaviour extends SimpleBehaviour implements StartBehaviour
             System.out.println("MSG START BEHAVIOUR FINISHED");
             this.done = true;
             ((BpmnAgent)myAgent).cleanStartEventBehaviours();
+            //TODO: mark outgoing transition as active
         }
     }
 
@@ -32,5 +33,8 @@ public class MsgStartBehaviour extends SimpleBehaviour implements StartBehaviour
         return this.done;
     }
 
-
+    @Override
+    public boolean isRunnable() {
+        return super.isRunnable();
+    }
 }
