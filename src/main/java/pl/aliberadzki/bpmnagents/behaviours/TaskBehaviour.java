@@ -10,49 +10,32 @@ import java.util.Collection;
 /**
  * Created by aliberadzki on 05.05.2017.
  */
-public class TaskBehaviour extends Behaviour {
-    private boolean completed = false;
+public class TaskBehaviour extends BpmnBehaviour {
     private Task task;
 
     public TaskBehaviour(BpmnAgent a, Task task) {
-        super(a);
+        super(a, task);
         this.task = task;
     }
 
     @Override
-    public void action() {
-        if(canRun()) {
-            System.out.println("EXECUTION OF TASK " + task.getId());
-            this.deactivate(task.getIncoming());
-            this.markAsActive(task.getOutgoing());
-            completed = true;
-            return;
-        }
-        this.block();
+    protected boolean canRun() {
+        return anyIncomingRouteActive();
     }
 
     @Override
-    public boolean done() {
-        return this.completed;
+    protected boolean execute() {
+        System.out.println("EXECUTION OF TASK " + task.getId());
+        return true;
     }
 
-    private boolean canRun() {
-        System.out.println("EXECUTION OF canRun " + task.getId());
-        //anyMatch bo to nie bramka
-        return task.getIncoming().stream()
-                .anyMatch(sequenceFlow -> ((BpmnAgent)myAgent).isActive(sequenceFlow));
+    @Override
+    protected void beforeFinish() {
+
     }
 
-    private void markAsActive(Collection<SequenceFlow> outgoingSequenceFlows)
-    {
-        //TODO filter which should be marked as active?
-        ((BpmnAgent)myAgent).markAsActive(outgoingSequenceFlows);
-        outgoingSequenceFlows
-                .forEach(sequenceFlow -> ((BpmnAgent)myAgent).scheduleActivity(sequenceFlow.getTarget()));
-    }
+    @Override
+    protected void afterFinish() {
 
-    private void deactivate(Collection<SequenceFlow> sequenceFlows)
-    {
-        sequenceFlows.forEach(sequenceFlow -> ((BpmnAgent)myAgent).finish(sequenceFlow));
     }
 }

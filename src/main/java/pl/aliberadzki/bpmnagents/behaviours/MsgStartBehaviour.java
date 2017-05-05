@@ -14,39 +14,34 @@ import java.util.Collection;
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class MsgStartBehaviour extends SimpleBehaviour implements StartBehaviour{
+public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
-    private boolean done = false;
     private StartEvent event;
 
     public MsgStartBehaviour(BpmnAgent a, StartEvent event) {
-        super(a);
+        super(a, event);
         this.event = event;
     }
 
     @Override
-    public void action() {
+    protected boolean canRun() {
         ACLMessage msg = myAgent.receive();
-        if(msg != null) {
-            System.out.println("MSG START BEHAVIOUR FINISHED");
-            this.markAsActive(event.getOutgoing());
-            this.done = true;
-            ((BpmnAgent)myAgent).cleanStartEventBehaviours();
-            //TODO: mark outgoing transition as active
-        }
+        return msg != null;
     }
 
     @Override
-    public boolean done() {
-        return this.done;
+    protected boolean execute() {
+        System.out.println("MSG START BEHAVIOUR FINISHED");
+        return true;
     }
 
-    private void markAsActive(Collection<SequenceFlow> outgoingSequenceFlows)
-    {
-        //TODO filter which should be marked as active?
-        ((BpmnAgent)myAgent).markAsActive(outgoingSequenceFlows);
-        outgoingSequenceFlows
-                .forEach(sequenceFlow -> ((BpmnAgent)myAgent).scheduleActivity(sequenceFlow.getTarget()));
+    @Override
+    protected void beforeFinish() {
 
+    }
+
+    @Override
+    protected void afterFinish() {
+            ((BpmnAgent)myAgent).cleanStartEventBehaviours();
     }
 }
