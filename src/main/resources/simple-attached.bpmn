@@ -4,14 +4,14 @@
     <bpmn:participant id="Participant_0ec48ft" name="Participant1" processRef="Process_1" />
   </bpmn:collaboration>
   <bpmn:process id="Process_1" isExecutable="false">
-    <bpmn:startEvent id="StartEvent_1">
+    <bpmn:startEvent id="StartEvent_111">
       <bpmn:outgoing>SequenceFlow_0kor2g9</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:task id="Task_0lwvu13" name="wait task">
       <bpmn:incoming>SequenceFlow_0kor2g9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0pgvkl9</bpmn:outgoing>
     </bpmn:task>
-    <bpmn:sequenceFlow id="SequenceFlow_0kor2g9" sourceRef="StartEvent_1" targetRef="Task_0lwvu13" />
+    <bpmn:sequenceFlow id="SequenceFlow_0kor2g9" sourceRef="StartEvent_111" targetRef="Task_0lwvu13" />
     <bpmn:endEvent id="EndEvent_1l67dmy">
       <bpmn:incoming>SequenceFlow_0pgvkl9</bpmn:incoming>
     </bpmn:endEvent>
@@ -35,7 +35,7 @@
       <bpmndi:BPMNShape id="Participant_0ec48ft_di" bpmnElement="Participant_0ec48ft">
         <dc:Bounds x="247" y="139" width="600" height="250" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_111">
         <dc:Bounds x="303" y="249" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="276" y="285" width="90" height="20" />
