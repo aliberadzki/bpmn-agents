@@ -2,7 +2,6 @@ package pl.aliberadzki.bpmnagents;
 
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.ThreadedBehaviourFactory;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -34,7 +33,7 @@ public class BpmnAgent extends Agent {
     {
         this.bpdName = (String) getArguments()[0];
         this.participantId = (String) getArguments()[1];
-        this.initStartEventListeners();
+        this.initStartEvents();
         //TODO init intermediate start events WHEN process started
     }
 
@@ -51,10 +50,10 @@ public class BpmnAgent extends Agent {
         this.startBehaviours.forEach(this::removeBehaviour);
     }
 
-    private void initStartEventListeners()
+    private void initStartEvents()
     {
-        getStartEvent(this.getProcess())
-                .forEach(this::addStartEventListener);
+        Collection<StartEvent> events = getStartEvent(this.getProcess());
+        events.forEach(this::addStartEventListener);
     }
 
     private Collection<StartEvent> getStartEvent(Process process)

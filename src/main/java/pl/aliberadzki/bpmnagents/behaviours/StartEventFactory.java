@@ -21,6 +21,8 @@ public class StartEventFactory {
                 behaviour = new TimerStartBehaviour(agent, event);
             }
         }
+
+        if(behaviour == null) behaviour = new PlainStartBehaviour(agent, event);
         return behaviour;
     }
 }
