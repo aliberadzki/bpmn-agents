@@ -28,14 +28,4 @@ public class TaskBehaviour extends BpmnBehaviour {
         System.out.println("EXECUTION OF TASK " + task.getId());
         return true;
     }
-
-    @Override
-    protected void beforeFinish() {
-
-    }
-
-    @Override
-    protected void afterFinish() {
-
-    }
 }

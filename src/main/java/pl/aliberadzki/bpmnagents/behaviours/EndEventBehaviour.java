@@ -18,7 +18,6 @@ public class EndEventBehaviour extends BpmnBehaviour {
         this.endEvent = endEvent;
     }
 
-
     @Override
     protected boolean canRun() {
         return this.anyIncomingRouteActive();
@@ -27,16 +26,7 @@ public class EndEventBehaviour extends BpmnBehaviour {
     @Override
     protected boolean execute() {
         System.out.println("EXECUTION OF END_EVENT " + endEvent.getId());
-        return false;
+        return true;
     }
 
-    @Override
-    protected void beforeFinish() {
-
-    }
-
-    @Override
-    protected void afterFinish() {
-
-    }
 }

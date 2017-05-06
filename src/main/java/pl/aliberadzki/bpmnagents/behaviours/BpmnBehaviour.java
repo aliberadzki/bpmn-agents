@@ -25,20 +25,32 @@ public abstract class BpmnBehaviour extends Behaviour {
 
     protected abstract boolean execute();
 
-    protected abstract void beforeFinish();
+    protected void beforeFinish()
+    {
 
-    protected abstract void afterFinish();
+    }
+
+    protected void afterFinish()
+    {
+
+    }
 
     @Override
     public void action() {
         if(canRun()) {
             this.beforeFinish();
             this.done = this.execute();
-            this.deactivate(flowNode.getIncoming());
-            this.markAsActive(flowNode.getOutgoing());
-            this.afterFinish();
+            if(done) {
+                this.deactivate(flowNode.getIncoming());
+                this.markAsActive(flowNode.getOutgoing());
+                this.afterFinish();
+            }
         }
-        block();
+        else blockBehaviour();
+    }
+
+    protected void blockBehaviour() {
+        this.block();
     }
 
     @Override
