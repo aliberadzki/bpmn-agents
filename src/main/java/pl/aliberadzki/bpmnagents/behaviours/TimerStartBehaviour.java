@@ -1,12 +1,7 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
-import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-
-import java.util.Collection;
 
 /**
  * Created by aliberadzki on 04.05.17.
@@ -51,7 +46,6 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
 
     @Override
     protected void afterFinish() {
-        //TODO : maybe it should be possible to conduct 2 parallel instances?
         ((BpmnAgent)myAgent).cleanStartEventBehaviours();
     }
 }

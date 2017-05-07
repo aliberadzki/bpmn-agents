@@ -12,7 +12,6 @@ import java.util.Collection;
  */
 public abstract class BpmnBehaviour extends Behaviour {
     private FlowNode flowNode;
-
     protected boolean done = false;
 
     public BpmnBehaviour(BpmnAgent agent, FlowNode flowNode)
@@ -21,22 +20,14 @@ public abstract class BpmnBehaviour extends Behaviour {
         this.flowNode = flowNode;
     }
 
-    protected abstract boolean canRun();
-
-    protected abstract boolean execute();
-
-    protected void beforeFinish()
+    public String getId()
     {
-
-    }
-
-    protected void afterFinish()
-    {
-
+        return this.flowNode.getId();
     }
 
     @Override
-    public void action() {
+    public void action()
+    {
         if(canRun()) {
             this.beforeFinish();
             this.done = this.execute();
@@ -49,26 +40,32 @@ public abstract class BpmnBehaviour extends Behaviour {
         else blockBehaviour();
     }
 
+    @Override
+    public boolean done()
+    {
+        return this.done;
+    }
+
+    protected abstract boolean canRun();
+
+    protected abstract boolean execute();
+
+    protected void beforeFinish() {}
+
+    protected void afterFinish() {}
+
     protected void blockBehaviour() {
         this.block();
     }
 
-    @Override
-    public boolean done() {
-        return this.done;
-    }
-
-    private void deactivate(Collection<SequenceFlow> sequenceFlows)
+    protected boolean anyIncomingRouteActive()
     {
-        sequenceFlows.forEach(sequenceFlow -> ((BpmnAgent)myAgent).finish(sequenceFlow));
-    }
-
-    protected boolean anyIncomingRouteActive() {
         return flowNode.getIncoming().stream()
                 .anyMatch(sequenceFlow -> ((BpmnAgent)myAgent).isActive(sequenceFlow));
     }
 
-    protected boolean allIncomingRouteActive() {
+    protected boolean allIncomingRouteActive()
+    {
         return flowNode.getIncoming().stream()
                 .allMatch(sequenceFlow -> ((BpmnAgent)myAgent).isActive(sequenceFlow));
     }
@@ -81,5 +78,8 @@ public abstract class BpmnBehaviour extends Behaviour {
                 .forEach(sequenceFlow -> ((BpmnAgent)myAgent).scheduleActivity(sequenceFlow.getTarget()));
     }
 
-
+    private void deactivate(Collection<SequenceFlow> sequenceFlows)
+    {
+        sequenceFlows.forEach(sequenceFlow -> ((BpmnAgent)myAgent).finish(sequenceFlow));
+    }
 }

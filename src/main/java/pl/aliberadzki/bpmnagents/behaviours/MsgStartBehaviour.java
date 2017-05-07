@@ -11,6 +11,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
     private StartEvent event;
+    private ACLMessage msg;
 
     public MsgStartBehaviour(BpmnAgent a, StartEvent event) {
         super(a, event);
@@ -19,19 +20,18 @@ public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
     @Override
     protected boolean canRun() {
-        ACLMessage msg = myAgent.receive();
-        return msg != null;
+        this.msg = myAgent.receive();
+        return this.msg != null;
     }
 
     @Override
     protected boolean execute() {
-        System.out.println("MSG START BEHAVIOUR FINISHED");
+        System.out.println("MSG START BEHAVIOUR FINISHED. msg: " + this.msg.getContent());
         return true;
     }
 
     @Override
     protected void afterFinish() {
-        //TODO : maybe it should be possible to conduct 2 parallel instances?
         ((BpmnAgent)myAgent).cleanStartEventBehaviours();
     }
 }

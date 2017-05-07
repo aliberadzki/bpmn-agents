@@ -1,7 +1,5 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
-import jade.core.behaviours.Behaviour;
-import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
@@ -29,7 +27,6 @@ public class PlainStartBehaviour extends BpmnBehaviour {
 
     @Override
     protected void afterFinish() {
-        //TODO : maybe it should be possible to conduct 2 parallel instances?
         ((BpmnAgent)myAgent).cleanStartEventBehaviours();
     }
 }

@@ -1,11 +1,7 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
-import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-
-import java.util.Collection;
 
 /**
  * Created by aliberadzki on 05.05.2017.

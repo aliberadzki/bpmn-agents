@@ -1,11 +1,9 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
-import jade.core.behaviours.Behaviour;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
+import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.Task;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
-import java.util.Collection;
 
 /**
  * Created by aliberadzki on 05.05.2017.
@@ -19,13 +17,32 @@ public class TaskBehaviour extends BpmnBehaviour {
     }
 
     @Override
+    public void onStart() {
+        task.getModelInstance()
+                .getModelElementsByType(BoundaryEvent.class)
+                .stream()
+                .filter(boundaryEvent -> boundaryEvent.getAttachedTo().getId().equals(task.getId()))
+                .forEach(boundaryEvent -> ((BpmnAgent)myAgent).addEventListener(boundaryEvent));
+    }
+
+    @Override
+    public int onEnd() {
+        task.getModelInstance()
+                .getModelElementsByType(BoundaryEvent.class)
+                .stream()
+                .filter(boundaryEvent -> boundaryEvent.getAttachedTo().getId().equals(task.getId()))
+                .forEach(boundaryEvent -> ((BpmnAgent)myAgent).cancelEventListener(boundaryEvent.getId()));
+        return super.onEnd();
+    }
+
+    @Override
     protected boolean canRun() {
         return anyIncomingRouteActive();
     }
 
     @Override
     protected boolean execute() {
-        System.out.println("EXECUTION OF TASK " + task.getId());
+        System.out.println("EXECUTION OF TASK " + task.getName() + " (" + task.getId() + ")");
         return true;
     }
 }

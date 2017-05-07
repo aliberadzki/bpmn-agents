@@ -4,13 +4,9 @@ import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
-import org.camunda.bpm.model.bpmn.instance.StartEvent;
-import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
-import pl.aliberadzki.bpmnagents.behaviours.StartBehaviour;
-import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
+import pl.aliberadzki.bpmnagents.behaviours.*;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,7 +20,9 @@ public class BpmnAgent extends Agent {
     private String bpdName;
     private String participantId;
 
-    private Collection<Behaviour> startBehaviours = new ArrayList<>();
+    private Collection<BpmnBehaviour> startBehaviours = new ArrayList<>();
+    private Collection<BpmnBehaviour> eventListeners = new ArrayList<>();
+    private Collection<BpmnBehaviour> activityBehaviours = new ArrayList<>();
     private Collection<SequenceFlow> activeFlows = new ArrayList<>();
     private Collection<SequenceFlow> finishedFlows = new ArrayList<>();
 
@@ -34,15 +32,7 @@ public class BpmnAgent extends Agent {
         this.bpdName = (String) getArguments()[0];
         this.participantId = (String) getArguments()[1];
         this.initStartEvents();
-        //TODO init intermediate start events WHEN process started
-    }
-
-    @Override
-    public void addBehaviour(Behaviour b) {
-        super.addBehaviour(b);
-        if(b instanceof StartBehaviour) {
-            this.startBehaviours.add(b);
-        }
+        //TODO init intermediate events WHEN process started
     }
 
     public void cleanStartEventBehaviours()
@@ -79,13 +69,6 @@ public class BpmnAgent extends Agent {
         return modelInstance.getModelElementById(processRef);
     }
 
-    private void addStartEventListener(StartEvent startEvent)
-    {
-        Behaviour behaviour = StartEventFactory.create(startEvent, this);
-        if(behaviour == null) return;
-        this.addBehaviour(behaviour);
-    }
-
     public void markAsActive(Collection<SequenceFlow> sequenceFlows)
     {
         activeFlows.addAll(sequenceFlows);
@@ -101,7 +84,51 @@ public class BpmnAgent extends Agent {
         this.finishedFlows.add(flow);
     }
 
-    public void scheduleActivity(FlowNode flowNode) {
-        this.addBehaviour(ActivityFactory.create(flowNode, this));
+    private void addStartEventListener(StartEvent startEvent)
+    {
+        BpmnBehaviour behaviour = StartEventFactory.create(startEvent, this);
+        if(behaviour == null) return;
+        this.addBehaviour(behaviour);
+        this.startBehaviours.add(behaviour);
+    }
+
+    public void addEventListener(Event event)
+    {
+        BpmnBehaviour behaviour = ActivityFactory.create(event, this);
+        if(behaviour == null) return;
+        this.addBehaviour(behaviour);
+        this.eventListeners.add(behaviour);
+    }
+
+    public void scheduleActivity(FlowNode flowNode)
+    {
+        BpmnBehaviour behaviour = ActivityFactory.create(flowNode, this);
+        if(behaviour == null) return;
+        this.addBehaviour(behaviour);
+        this.activityBehaviours.add(behaviour);
+    }
+
+    public void cancelBehaviour(String activityId) {
+        BpmnBehaviour behaviour = this.activityBehaviours.stream()
+                .filter(bpmnBehaviour -> bpmnBehaviour.getId().equals(activityId))
+                .findFirst()
+                .orElse(null);
+
+        if(behaviour == null ) return;
+        System.out.println("Cancelling behaviour : " + activityId);
+        this.removeBehaviour(behaviour);
+        this.activityBehaviours.remove(behaviour);
+    }
+
+    public void cancelEventListener(String eventId) {
+        BpmnBehaviour behaviour = this.eventListeners.stream()
+                .filter(bpmnBehaviour -> bpmnBehaviour.getId().equals(eventId))
+                .findFirst()
+                .orElse(null);
+
+        if(behaviour == null ) return;
+        System.out.println("Cancelling listener : " + eventId);
+        this.removeBehaviour(behaviour);
+        this.eventListeners.remove(behaviour);
     }
 }
