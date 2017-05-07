@@ -116,6 +116,12 @@ public class BpmnAgent extends Agent {
 
         if(behaviour == null ) return;
         System.out.println("Cancelling behaviour : " + activityId);
+        //TODO: cancel all boundary events
+        this.eventListeners.stream()
+                .filter(BoundaryEventBehaviour.class::isInstance)
+                .filter(bpmnBehaviour -> ((BoundaryEventBehaviour)bpmnBehaviour).getAttachedToId().equals(activityId))
+                .collect(Collectors.toList())
+                .forEach(bpmBeh -> cancelEventListener(bpmBeh.getId()));
         this.removeBehaviour(behaviour);
         this.activityBehaviours.remove(behaviour);
     }

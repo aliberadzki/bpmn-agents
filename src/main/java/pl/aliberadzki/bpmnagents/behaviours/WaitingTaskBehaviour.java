@@ -9,7 +9,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  */
 public class WaitingTaskBehaviour extends TaskBehaviour {
     private final Task task;
-    private final long period = 5000;
+    private final long period = 20000;
     private long wakeupTime = -1;
 
     public WaitingTaskBehaviour(BpmnAgent a, Task task) {

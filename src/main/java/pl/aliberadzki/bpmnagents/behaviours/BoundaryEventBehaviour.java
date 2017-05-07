@@ -7,9 +7,8 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 07.05.17.
  */
-public class BoundaryEventBehaviour extends BpmnBehaviour implements EventListener {
+public abstract class BoundaryEventBehaviour extends BpmnBehaviour implements EventListener {
     private final BoundaryEvent event;
-    private ACLMessage msg = null;
 
     public BoundaryEventBehaviour(BpmnAgent agent, BoundaryEvent flowNode) {
         super(agent, flowNode);
@@ -17,20 +16,14 @@ public class BoundaryEventBehaviour extends BpmnBehaviour implements EventListen
     }
 
     @Override
-    protected boolean canRun() {
-        this.msg = myAgent.receive();
-        return this.msg != null;
-    }
-
-    @Override
-    protected boolean execute() {
-        System.out.println("Boundary event ran! (msg: "
-                + this.msg.getContent()
-                + ") cancelActivity: "
-                + event.cancelActivity());
+    protected void afterFinish() {
         if(event.cancelActivity()) {
             ((BpmnAgent)myAgent).cancelBehaviour(event.getAttachedTo().getId());
         }
-        return true;
+    }
+
+    public String getAttachedToId()
+    {
+        return event.getAttachedTo().getId();
     }
 }
