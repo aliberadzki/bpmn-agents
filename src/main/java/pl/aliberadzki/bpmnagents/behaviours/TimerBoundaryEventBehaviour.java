@@ -14,36 +14,44 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
     private long wakeupTime;
     private long blockTime;
 
-    public TimerBoundaryEventBehaviour(BpmnAgent agent, BoundaryEvent event) {
+    public TimerBoundaryEventBehaviour(BpmnAgent agent, BoundaryEvent event)
+    {
         super(agent, event);
         this.event = event;
-        this.period = Long.valueOf(((TimerEventDefinition)event.getEventDefinitions().iterator().next())
-                .getTimeDuration().getTextContent());
+        this.period = Long.valueOf(this.getTimerDuration());
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         this.startTime = System.currentTimeMillis();
         this.wakeupTime = this.startTime + this.period;
-        this.blockTime = this.wakeupTime - System.currentTimeMillis();
+        this.blockTime = this.wakeupTime - this.startTime;
     }
 
     @Override
-    protected boolean canRun() {
+    protected boolean canRun()
+    {
         long currentTime = System.currentTimeMillis();
         this.blockTime = this.wakeupTime - currentTime;
         return blockTime <= 0L;
     }
 
     @Override
-    protected boolean execute() {
+    protected boolean execute()
+    {
         ((BpmnAgent)myAgent).log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
         return true;
     }
 
-
     @Override
     protected void blockBehaviour() {
         super.block(blockTime);
+    }
+
+    private String getTimerDuration()
+    {
+        return ((TimerEventDefinition)this.event.getEventDefinitions().iterator().next())
+                .getTimeDuration().getTextContent();
     }
 }
