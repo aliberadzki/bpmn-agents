@@ -1,5 +1,8 @@
 package pl.aliberadzki.bpmnagents;
 
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -7,6 +10,7 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import pl.aliberadzki.bpmnagents.behaviours.*;
+import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -26,9 +30,16 @@ public class BpmnAgent extends Agent {
     private Collection<SequenceFlow> activeFlows = new ArrayList<>();
     private Collection<SequenceFlow> finishedFlows = new ArrayList<>();
 
+    private Codec codec = new SLCodec();
+    private Ontology ontology = BookTradingOntology.getInstance();
+
     @Override
     protected void setup()
     {
+        //Setup onotlogy stuff
+        getContentManager().registerLanguage(codec);
+        getContentManager().registerOntology(ontology);
+
         this.bpdName = (String) getArguments()[0];
         this.participantId = (String) getArguments()[1];
         this.initStartEvents();

@@ -33,11 +33,15 @@ public abstract class BpmnBehaviour extends Behaviour {
             this.done = this.execute();
             if(done) {
                 this.deactivate(flowNode.getIncoming());
-                this.markAsActive(flowNode.getOutgoing());
+                this.markAsActive(getOutgoing());
                 this.afterFinish();
             }
         }
         else blockBehaviour();
+    }
+
+    protected Collection<SequenceFlow> getOutgoing() {
+        return flowNode.getOutgoing();
     }
 
     @Override

@@ -2,8 +2,7 @@ package pl.aliberadzki.bpmnagents.behaviours;
 
 import org.camunda.bpm.model.bpmn.instance.*;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-
-import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Created by aliberadzki on 05.05.2017.
@@ -21,6 +20,8 @@ public class ActivityFactory {
                 return createBoundary((BoundaryEvent) flowNode, agent);
             case "endEvent":
                 return new EndEventBehaviour(agent, (EndEvent)flowNode);
+            case "exclusiveGateway":
+                return new ExclusiveGatewayBehaviour(agent, (ExclusiveGateway)flowNode);
 
             default:
                 //IF i dont know what to create, lets just end it
@@ -31,7 +32,7 @@ public class ActivityFactory {
     private static BoundaryEventBehaviour createBoundary(BoundaryEvent flowNode, BpmnAgent agent) {
         //TODO: check event definitions
         EventDefinition def= flowNode.getEventDefinitions().iterator().next();
-        if(def.getElementType().getTypeName() == "timerEventDefinition") {
+        if(Objects.equals(def.getElementType().getTypeName(), "timerEventDefinition")) {
             return new TimerBoundaryEventBehaviour(agent, flowNode);
         }
         return new MsgBoundaryEventBehaviour(agent, flowNode);
