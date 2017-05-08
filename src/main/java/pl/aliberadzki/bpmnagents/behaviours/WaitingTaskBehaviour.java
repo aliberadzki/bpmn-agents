@@ -29,7 +29,7 @@ public class WaitingTaskBehaviour extends TaskBehaviour {
             this.block(wakeupTime - current);
             return false;
         }
-        System.out.println("WAITING TASK FINISHED " + task.getName() + " (" + task.getId() + ")");
+        ((BpmnAgent)myAgent).log("WAITING TASK FINISHED " + task.getName() + " (" + task.getId() + ")");
         return true;
     }
 }

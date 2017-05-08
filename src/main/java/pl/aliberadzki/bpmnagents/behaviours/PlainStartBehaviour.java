@@ -21,7 +21,7 @@ public class PlainStartBehaviour extends BpmnBehaviour {
 
     @Override
     protected boolean execute() {
-        System.out.println("PLAIN START BEHAVIOUR FINISHED " + startEvent.getId());
+        ((BpmnAgent)myAgent).log("PLAIN START BEHAVIOUR FINISHED " + startEvent.getId());
         return true;
     }
 

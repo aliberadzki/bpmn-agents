@@ -29,7 +29,7 @@ public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
 
     @Override
     protected boolean execute() {
-        System.out.println("Boundary event ran! (msg: "
+        ((BpmnAgent)myAgent).log("Boundary event ran! (msg: "
                 + this.msg.getContent()
                 + ") cancelActivity: "
                 + event.cancelActivity());

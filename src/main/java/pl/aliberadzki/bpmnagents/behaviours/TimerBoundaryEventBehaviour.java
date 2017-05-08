@@ -37,7 +37,7 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
 
     @Override
     protected boolean execute() {
-        System.out.println("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
+        ((BpmnAgent)myAgent).log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
         return true;
     }
 

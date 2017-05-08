@@ -21,7 +21,7 @@ public class EndEventBehaviour extends BpmnBehaviour {
 
     @Override
     protected boolean execute() {
-        System.out.println("EXECUTION OF END_EVENT " + endEvent.getId());
+        ((BpmnAgent)myAgent).log("EXECUTION OF END_EVENT " + endEvent.getId());
         return true;
     }
 

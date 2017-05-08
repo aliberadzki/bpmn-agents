@@ -115,7 +115,7 @@ public class BpmnAgent extends Agent {
                 .orElse(null);
 
         if(behaviour == null ) return;
-        System.out.println("Cancelling behaviour : " + activityId);
+        log("Cancelling behaviour : " + activityId);
         //TODO: cancel all boundary events
         this.eventListeners.stream()
                 .filter(BoundaryEventBehaviour.class::isInstance)
@@ -133,8 +133,13 @@ public class BpmnAgent extends Agent {
                 .orElse(null);
 
         if(behaviour == null ) return;
-        System.out.println("Cancelling listener : " + eventId);
+        log("Cancelling listener : " + eventId);
         this.removeBehaviour(behaviour);
         this.eventListeners.remove(behaviour);
+    }
+
+    public void log(String content)
+    {
+        System.out.println('['+this.getAID().getLocalName() + "] " + content );
     }
 }
