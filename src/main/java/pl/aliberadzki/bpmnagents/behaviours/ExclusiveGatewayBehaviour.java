@@ -3,9 +3,9 @@ package pl.aliberadzki.bpmnagents.behaviours;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+
 import java.util.Collection;
 import java.util.Collections;
-import java.util.function.Supplier;
 
 /**
  * Created by aliberadzki on 08.05.17.

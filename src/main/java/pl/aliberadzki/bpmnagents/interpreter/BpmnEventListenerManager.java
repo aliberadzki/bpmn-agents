@@ -28,6 +28,7 @@ public class BpmnEventListenerManager {
         this.myAgent = myAgent;
         this.process = process;
         this.initStartEvents();
+        //TODO init intermediate events WHEN process started
     }
 
     public void cleanStartEventBehaviours()

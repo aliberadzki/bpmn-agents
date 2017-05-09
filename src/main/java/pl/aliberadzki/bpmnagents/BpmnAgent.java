@@ -13,18 +13,15 @@ import java.util.Collection;
  * Created by aliberadzki on 04.05.17.
  */
 public class BpmnAgent extends Agent {
-    private String bpdName;
-    private String participantId;
 
     private BpmnInterpreter interpreter;
 
     @Override
     protected void setup()
     {
-        this.bpdName = (String) getArguments()[0];
-        this.participantId = (String) getArguments()[1];
+        String bpdName = (String) getArguments()[0];
+        String participantId = (String) getArguments()[1];
         this.interpreter = new BpmnInterpreter(this, bpdName, participantId);
-        //TODO init intermediate events WHEN process started
     }
 
     public void log(String content)
