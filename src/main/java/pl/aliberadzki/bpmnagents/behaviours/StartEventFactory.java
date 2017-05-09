@@ -1,6 +1,5 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
-import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.instance.EventDefinition;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;

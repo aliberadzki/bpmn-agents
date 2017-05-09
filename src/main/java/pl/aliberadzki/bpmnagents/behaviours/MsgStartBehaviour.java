@@ -10,11 +10,13 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  */
 public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
+    private BpmnAgent bpmnAgent;
     private StartEvent event;
     private ACLMessage msg;
 
-    public MsgStartBehaviour(BpmnAgent a, StartEvent event) {
-        super(a, event);
+    public MsgStartBehaviour(BpmnAgent bpmnAgent, StartEvent event) {
+        super(bpmnAgent, event);
+        this.bpmnAgent = bpmnAgent;
         this.event = event;
     }
 
@@ -32,6 +34,6 @@ public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
     @Override
     protected void afterFinish() {
-        ((BpmnAgent)myAgent).cleanStartEventBehaviours();
+        bpmnAgent.processStarted();
     }
 }

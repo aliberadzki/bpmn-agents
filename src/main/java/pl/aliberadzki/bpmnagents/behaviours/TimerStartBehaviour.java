@@ -8,14 +8,16 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  */
 public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
+    private BpmnAgent bpmnAgent;
     private StartEvent event;
     private long startTime;
     private long wakeupTime;
     private long period;
     private long blockTime;
 
-    public TimerStartBehaviour(BpmnAgent a, StartEvent event) {
-        super(a, event);
+    public TimerStartBehaviour(BpmnAgent bpmnAgent, StartEvent event) {
+        super(bpmnAgent, event);
+        this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.period = 20000;
     }
@@ -46,6 +48,6 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
 
     @Override
     protected void afterFinish() {
-        ((BpmnAgent)myAgent).cleanStartEventBehaviours();
+        bpmnAgent.processStarted();
     }
 }

@@ -8,12 +8,14 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 07.05.17.
  */
 public class WaitingTaskBehaviour extends TaskBehaviour {
+    private BpmnAgent bpmnAgent;
     private final Task task;
     private final long period = 20000;
     private long wakeupTime = -1;
 
-    public WaitingTaskBehaviour(BpmnAgent a, Task task) {
-        super(a, task);
+    public WaitingTaskBehaviour(BpmnAgent bpmnAgent, Task task) {
+        super(bpmnAgent, task);
+        this.bpmnAgent = bpmnAgent;
         this.task = task;
     }
 
@@ -29,7 +31,7 @@ public class WaitingTaskBehaviour extends TaskBehaviour {
             this.block(wakeupTime - current);
             return false;
         }
-        ((BpmnAgent)myAgent).log("WAITING TASK FINISHED " + task.getName() + " (" + task.getId() + ")");
+        bpmnAgent.log("WAITING TASK FINISHED " + task.getName() + " (" + task.getId() + ")");
         return true;
     }
 }

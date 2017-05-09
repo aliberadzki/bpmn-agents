@@ -11,12 +11,14 @@ import java.util.Collection;
  * Created by aliberadzki on 05.05.17.
  */
 public abstract class BpmnBehaviour extends Behaviour {
+    private BpmnAgent bpmnAgent;
     private FlowNode flowNode;
     protected boolean done = false;
 
-    public BpmnBehaviour(BpmnAgent agent, FlowNode flowNode)
+    public BpmnBehaviour(BpmnAgent bpmnAgent, FlowNode flowNode)
     {
-        super(agent);
+        super(bpmnAgent);
+        this.bpmnAgent = bpmnAgent;
         this.flowNode = flowNode;
     }
 
@@ -33,7 +35,8 @@ public abstract class BpmnBehaviour extends Behaviour {
             this.done = this.execute();
             if(done) {
                 this.deactivate(flowNode.getIncoming());
-                this.markAsActive(getOutgoing());
+                //TODO filter which should be marked as active?
+                this.activate(getOutgoing());
                 this.afterFinish();
             }
         }
@@ -64,26 +67,21 @@ public abstract class BpmnBehaviour extends Behaviour {
 
     protected boolean anyIncomingRouteActive()
     {
-        return flowNode.getIncoming().stream()
-                .anyMatch(sequenceFlow -> ((BpmnAgent)myAgent).isActive(sequenceFlow));
+        return bpmnAgent.anyIncomingRouteActive(flowNode);
     }
 
-    protected boolean allIncomingRouteActive()
+    protected boolean allIncomingRoutesActive()
     {
-        return flowNode.getIncoming().stream()
-                .allMatch(sequenceFlow -> ((BpmnAgent)myAgent).isActive(sequenceFlow));
+        return bpmnAgent.allIncomingRoutesActive(flowNode);
     }
 
-    private void markAsActive(Collection<SequenceFlow> outgoingSequenceFlows)
+    private void activate(Collection<SequenceFlow> outgoingSequenceFlows)
     {
-        //TODO filter which should be marked as active?
-        ((BpmnAgent)myAgent).markAsActive(outgoingSequenceFlows);
-        outgoingSequenceFlows
-                .forEach(sequenceFlow -> ((BpmnAgent)myAgent).scheduleActivity(sequenceFlow.getTarget()));
+        bpmnAgent.activateFlows(outgoingSequenceFlows);
     }
 
     private void deactivate(Collection<SequenceFlow> sequenceFlows)
     {
-        sequenceFlows.forEach(sequenceFlow -> ((BpmnAgent)myAgent).finish(sequenceFlow));
+        bpmnAgent.deactivateFlows(sequenceFlows);
     }
 }

@@ -7,10 +7,12 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 06.05.17.
  */
 public class PlainStartBehaviour extends BpmnBehaviour {
+    private BpmnAgent agent;
     private final StartEvent startEvent;
 
-    public PlainStartBehaviour(BpmnAgent agent, StartEvent event) {
-        super(agent, event);
+    public PlainStartBehaviour(BpmnAgent bpmnAgent, StartEvent event) {
+        super(bpmnAgent, event);
+        this.agent = bpmnAgent;
         this.startEvent = event;
     }
 
@@ -27,6 +29,6 @@ public class PlainStartBehaviour extends BpmnBehaviour {
 
     @Override
     protected void afterFinish() {
-        ((BpmnAgent)myAgent).cleanStartEventBehaviours();
+        agent.processStarted();
     }
 }
