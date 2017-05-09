@@ -12,9 +12,7 @@ public class ActivityFactory {
         String typeName = flowNode.getElementType().getTypeName();
         switch (typeName) {
             case "task":
-                //TODO this if should be removed
-                if(flowNode.getName().contains("wait")) return new WaitingTaskBehaviour(agent, (Task)flowNode);
-                return new TaskBehaviour(agent, (Task)flowNode);
+                return createTask(flowNode, agent);
 
             case "boundaryEvent":
                 return createBoundary((BoundaryEvent) flowNode, agent);
@@ -29,11 +27,17 @@ public class ActivityFactory {
         }
     }
 
+    private static BpmnBehaviour createTask(FlowNode flowNode, BpmnAgent agent) {
+        if(flowNode.getName().contains("wait")) return new WaitingTaskBehaviour(agent, (Task)flowNode);
+        return new TaskBehaviour(agent, (Task)flowNode);
+    }
+
     private static BoundaryEventBehaviour createBoundary(BoundaryEvent flowNode, BpmnAgent agent) {
-        //TODO: check event definitions
         EventDefinition def= flowNode.getEventDefinitions().iterator().next();
         if(Objects.equals(def.getElementType().getTypeName(), "timerEventDefinition")) {
-            return new TimerBoundaryEventBehaviour(agent, flowNode);
+            //TODO it is ugly
+            long period = Long.valueOf(((TimerEventDefinition)def).getTimeDuration().getTextContent());
+            return new TimerBoundaryEventBehaviour(agent, flowNode, period);
         }
         return new MsgBoundaryEventBehaviour(agent, flowNode);
     }

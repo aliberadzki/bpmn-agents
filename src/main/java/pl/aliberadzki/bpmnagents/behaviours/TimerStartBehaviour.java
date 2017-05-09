@@ -37,7 +37,7 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
 
     @Override
     protected boolean execute() {
-        ((BpmnAgent)myAgent).log("TIMER START BEHAVIOUR FINISHED");
+        bpmnAgent.log("TIMER START BEHAVIOUR FINISHED");
         return true;
     }
 

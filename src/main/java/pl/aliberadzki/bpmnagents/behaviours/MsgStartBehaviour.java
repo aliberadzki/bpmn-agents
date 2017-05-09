@@ -28,7 +28,7 @@ public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
     @Override
     protected boolean execute() {
-        ((BpmnAgent)myAgent).log("MSG START BEHAVIOUR FINISHED. msg: " + this.msg.getContent());
+        bpmnAgent.log("MSG START BEHAVIOUR FINISHED. msg: " + this.msg.getContent());
         return true;
     }
 

@@ -7,10 +7,12 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 05.05.2017.
  */
 public class EndEventBehaviour extends BpmnBehaviour {
+    private BpmnAgent bpmnAgent;
     private EndEvent endEvent = null;
 
-    public EndEventBehaviour(BpmnAgent agent, EndEvent endEvent) {
-        super(agent, endEvent);
+    public EndEventBehaviour(BpmnAgent bpmnAgent, EndEvent endEvent) {
+        super(bpmnAgent, endEvent);
+        this.bpmnAgent = bpmnAgent;
         this.endEvent = endEvent;
     }
 
@@ -21,7 +23,7 @@ public class EndEventBehaviour extends BpmnBehaviour {
 
     @Override
     protected boolean execute() {
-        ((BpmnAgent)myAgent).log("EXECUTION OF END_EVENT " + endEvent.getId());
+        bpmnAgent.log("EXECUTION OF END_EVENT " + endEvent.getId());
         return true;
     }
 

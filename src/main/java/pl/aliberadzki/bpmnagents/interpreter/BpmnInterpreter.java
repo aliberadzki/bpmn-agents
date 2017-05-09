@@ -37,7 +37,6 @@ public class BpmnInterpreter {
         this.eventManager = new BpmnEventListenerManager(bpmnAgent, this.loadProcessDefinition());
     }
 
-
     public void markFlowAsActive(Collection<SequenceFlow> sequenceFlows)
     {
         activeFlows.addAll(sequenceFlows);
@@ -71,9 +70,7 @@ public class BpmnInterpreter {
 
         if(behaviour == null ) return;
         myAgent.log("Cancelling behaviour : " + activityId);
-        //TODO: cancel all boundary events
         eventManager.cancelEventListenersOn(activityId);
-
         myAgent.removeBehaviour(behaviour);
         this.activityBehaviours.remove(behaviour);
     }
@@ -99,28 +96,6 @@ public class BpmnInterpreter {
                 .stream()
                 .filter(boundaryEvent -> isAttachedTo(task, boundaryEvent))
                 .forEach(boundaryEvent -> eventManager.cancelEventListener(boundaryEvent.getId()));
-    }
-
-    private boolean isAttachedTo(Task task, BoundaryEvent boundaryEvent)
-    {
-        return boundaryEvent.getAttachedTo().getId().equals(task.getId());
-    }
-
-    private Process loadProcessDefinition()
-    {
-        if(bpmnProcess != null) return bpmnProcess;
-        InputStream bpdStream = getClass()
-                .getClassLoader()
-                .getResourceAsStream(bpdName + ".bpmn");
-        BpmnModelInstance modelInstance = bpdStream!=null
-                ? Bpmn.readModelFromStream(bpdStream)
-                : Bpmn.createEmptyModel();
-        String processRef = modelInstance
-                .getModelElementById(participantId)
-                .getAttributeValue("processRef");
-
-        bpmnProcess = modelInstance.getModelElementById(processRef);
-        return bpmnProcess;
     }
 
     public boolean isAnyIncomingRouteActive(FlowNode flowNode)
@@ -149,5 +124,27 @@ public class BpmnInterpreter {
     public void cancelActivityWithAttachee(BoundaryEvent event)
     {
         cancelBehaviour(event.getAttachedTo().getId());
+    }
+
+    private boolean isAttachedTo(Task task, BoundaryEvent boundaryEvent)
+    {
+        return boundaryEvent.getAttachedTo().getId().equals(task.getId());
+    }
+
+    private Process loadProcessDefinition()
+    {
+        if(bpmnProcess != null) return bpmnProcess;
+        InputStream bpdStream = getClass()
+                .getClassLoader()
+                .getResourceAsStream(bpdName + ".bpmn");
+        BpmnModelInstance modelInstance = bpdStream!=null
+                ? Bpmn.readModelFromStream(bpdStream)
+                : Bpmn.createEmptyModel();
+        String processRef = modelInstance
+                .getModelElementById(participantId)
+                .getAttributeValue("processRef");
+
+        bpmnProcess = modelInstance.getModelElementById(processRef);
+        return bpmnProcess;
     }
 }

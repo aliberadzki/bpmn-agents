@@ -11,10 +11,12 @@ import java.util.function.Supplier;
  * Created by aliberadzki on 08.05.17.
  */
 public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
+    private BpmnAgent bpmnAgent;
     private final ExclusiveGateway gateway;
 
-    public ExclusiveGatewayBehaviour(BpmnAgent agent, ExclusiveGateway gateway) {
-        super(agent, gateway);
+    public ExclusiveGatewayBehaviour(BpmnAgent bpmnAgent, ExclusiveGateway gateway) {
+        super(bpmnAgent, gateway);
+        this.bpmnAgent = bpmnAgent;
         this.gateway = gateway;
     }
 
@@ -25,7 +27,7 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
 
     @Override
     protected boolean execute() {
-        ((BpmnAgent)myAgent).log("Gateway executing: " + gateway.getName() + " (" + gateway.getId() + ')');
+        bpmnAgent.log("Gateway executing: " + gateway.getName() + " (" + gateway.getId() + ')');
         return true;
     }
 
@@ -41,7 +43,7 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
 
     private boolean isConditionTrue(SequenceFlow sequenceFlow) {
         String expression = sequenceFlow.getConditionExpression().getTextContent();
-        System.out.println(expression);
+        bpmnAgent.log("Checking if true: " + expression);
         //TODO: it should somehow use the agent knowledge of its state or beliefs
         return expression.contains(">=100");
     }

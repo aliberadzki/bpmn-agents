@@ -71,9 +71,13 @@ public class BpmnEventListenerManager {
     {
         this.eventListeners.stream()
                 .filter(BoundaryEventBehaviour.class::isInstance)
-                .filter(bpmnBehaviour -> ((BoundaryEventBehaviour)bpmnBehaviour).getAttachedToId().equals(activityId))
-                .collect(Collectors.toList())
+                .filter(bpmnBehaviour -> isAttachedTo(activityId, bpmnBehaviour))
                 .forEach(bpmBeh -> cancelEventListener(bpmBeh.getId()));
+    }
+
+    private boolean isAttachedTo(String activityId, BpmnBehaviour bpmnBehaviour)
+    {
+        return ((BoundaryEventBehaviour)bpmnBehaviour).getAttachedToId().equals(activityId);
     }
 
     private Collection<StartEvent> getStartEvents(Process process)

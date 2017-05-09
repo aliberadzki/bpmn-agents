@@ -8,17 +8,19 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 07.05.17.
  */
 public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
+    private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
     private final long period;
     private long startTime;
     private long wakeupTime;
     private long blockTime;
 
-    public TimerBoundaryEventBehaviour(BpmnAgent agent, BoundaryEvent event)
+    public TimerBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event, long period)
     {
-        super(agent, event);
+        super(bpmnAgent, event);
+        this.bpmnAgent = bpmnAgent;
         this.event = event;
-        this.period = Long.valueOf(this.getTimerDuration());
+        this.period = period;
     }
 
     @Override
@@ -40,18 +42,12 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
     @Override
     protected boolean execute()
     {
-        ((BpmnAgent)myAgent).log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
+        bpmnAgent.log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
         return true;
     }
 
     @Override
     protected void blockBehaviour() {
         super.block(blockTime);
-    }
-
-    private String getTimerDuration()
-    {
-        return ((TimerEventDefinition)this.event.getEventDefinitions().iterator().next())
-                .getTimeDuration().getTextContent();
     }
 }

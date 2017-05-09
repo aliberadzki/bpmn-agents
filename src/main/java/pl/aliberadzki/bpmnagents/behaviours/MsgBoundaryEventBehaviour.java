@@ -10,12 +10,14 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 07.05.17.
  */
 public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
+    private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
     private ACLMessage msg = null;
     private String msgId;
 
-    public MsgBoundaryEventBehaviour(BpmnAgent agent, BoundaryEvent event) {
-        super(agent, event);
+    public MsgBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event) {
+        super(bpmnAgent, event);
+        this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.msgId = ((MessageEventDefinition)event.getEventDefinitions().iterator().next())
                 .getMessage().getId();
@@ -29,7 +31,7 @@ public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
 
     @Override
     protected boolean execute() {
-        ((BpmnAgent)myAgent).log("Boundary event ran! (msg: "
+        bpmnAgent.log("Boundary event ran! (msg: "
                 + this.msg.getContent()
                 + ") cancelActivity: "
                 + event.cancelActivity());
