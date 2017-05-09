@@ -1,13 +1,23 @@
 package pl.aliberadzki.bpmnagents;
 
+import jade.content.lang.Codec;
+import jade.content.lang.sl.SLCodec;
+import jade.content.onto.Ontology;
 import jade.core.Agent;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.Task;
+import pl.aliberadzki.bpmnagents.knowledge.Belief;
 import pl.aliberadzki.bpmnagents.interpreter.BpmnInterpreter;
+import pl.aliberadzki.bpmnagents.knowledge.Expression;
+import pl.aliberadzki.bpmnagents.knowledge.Knowledge;
+import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by aliberadzki on 04.05.17.
@@ -15,6 +25,9 @@ import java.util.Collection;
 public class BpmnAgent extends Agent {
 
     private BpmnInterpreter interpreter;
+    private Codec codec = new SLCodec();
+    private Ontology ontology = BookTradingOntology.getInstance();
+    private Knowledge knowledge = new Knowledge();
 
     @Override
     protected void setup()
@@ -22,6 +35,19 @@ public class BpmnAgent extends Agent {
         String bpdName = (String) getArguments()[0];
         String participantId = (String) getArguments()[1];
         this.interpreter = new BpmnInterpreter(this, bpdName, participantId);
+
+        getContentManager().registerLanguage(codec);
+        getContentManager().registerOntology(ontology);
+    }
+
+    public boolean evaluateExpression(Expression expression)
+    {
+        return knowledge.evaluateExpression(expression);
+    }
+
+    public void recognizeFact(String key, Object value)
+    {
+        knowledge.recognizeFact(key, value);
     }
 
     public void log(String content)

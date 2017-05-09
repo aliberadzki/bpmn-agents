@@ -32,8 +32,7 @@ public class BookTradingOntology extends Ontology implements BookTradingVocabula
             // Structure of the schema for the Book concept
             ConceptSchema cs = (ConceptSchema) getSchema(BOOK);
             cs.add(BOOK_TITLE, (PrimitiveSchema) getSchema(BasicOntology.STRING));
-            cs.add(BOOK_AUTHORS, (PrimitiveSchema) getSchema(BasicOntology.STRING), 0,
-                    ObjectSchema.UNLIMITED);
+            cs.add(BOOK_AUTHORS, (PrimitiveSchema) getSchema(BasicOntology.STRING), 0, ObjectSchema.UNLIMITED);
             cs.add(BOOK_EDITOR, (PrimitiveSchema) getSchema(BasicOntology.STRING), ObjectSchema.OPTIONAL);
 
             // Structure of the schema for the Costs predicate

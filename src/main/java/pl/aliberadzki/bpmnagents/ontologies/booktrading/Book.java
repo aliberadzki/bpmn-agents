@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by aliberadzki on 08.05.17.
  */
-public class Book implements Concept{
+public class Book implements Concept {
     private String title;
     private List authors;
     private String editor;

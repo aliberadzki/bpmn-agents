@@ -3,6 +3,7 @@ package pl.aliberadzki.bpmnagents.behaviours;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.knowledge.Expression;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +45,6 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
     private boolean isConditionTrue(SequenceFlow sequenceFlow) {
         String expression = sequenceFlow.getConditionExpression().getTextContent();
         bpmnAgent.log("Checking if true: " + expression);
-        //TODO: it should somehow use the agent knowledge of its state or beliefs
-        return expression.contains(">=100");
+        return bpmnAgent.evaluateExpression(new Expression(expression));
     }
 }
