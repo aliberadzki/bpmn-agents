@@ -44,7 +44,8 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
 
     private boolean isConditionTrue(SequenceFlow sequenceFlow) {
         String expression = sequenceFlow.getConditionExpression().getTextContent();
-        bpmnAgent.log("Checking if true: " + expression);
-        return bpmnAgent.evaluateExpression(new Expression(expression));
+        Boolean result = bpmnAgent.evaluateExpression(new Expression(expression));
+        bpmnAgent.log("Checking if true: " + expression + " " + result);
+        return result;
     }
 }

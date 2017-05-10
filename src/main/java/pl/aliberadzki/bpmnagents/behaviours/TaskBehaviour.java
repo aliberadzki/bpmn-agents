@@ -37,7 +37,7 @@ public class TaskBehaviour extends BpmnBehaviour {
     @Override
     protected boolean execute() {
         bpmnAgent.log("EXECUTION OF TASK " + task.getName() + " (" + task.getId() + ")");
-        bpmnAgent.recognizeFact("result", 200);
+        bpmnAgent.recognizeFact("result", 50);
         return true;
     }
 }
