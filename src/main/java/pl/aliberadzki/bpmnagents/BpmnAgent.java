@@ -13,7 +13,9 @@ import pl.aliberadzki.bpmnagents.knowledge.Expression;
 import pl.aliberadzki.bpmnagents.knowledge.Knowledge;
 import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by aliberadzki on 04.05.17.
@@ -28,16 +30,19 @@ public class BpmnAgent extends Agent {
     @Override
     protected void setup()
     {
-        String bpdName = (String) getArguments()[0];
-        String participantId = (String) getArguments()[1];
-        this.interpreter = new BpmnInterpreter(this, bpdName, participantId);
-
-        //TODO refactor
-        String bookName = (String) getArguments()[2];
-        this.recognizeFact("bookName", bookName);
+        this.initParameters();
 
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontology);
+    }
+
+    private void initParameters()
+    {
+        Object[] args = getArguments();
+        String bpdName = (String) args[0];
+        String participantId = (String) args[1];
+        List<Object> paramList = Arrays.asList(args).subList(2, args.length);
+        this.interpreter = new BpmnInterpreter(this, bpdName, participantId, paramList);
     }
 
     public boolean evaluateExpression(Expression expression)

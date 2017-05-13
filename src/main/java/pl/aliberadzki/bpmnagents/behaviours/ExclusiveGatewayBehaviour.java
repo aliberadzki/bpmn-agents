@@ -16,7 +16,8 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
     private BpmnAgent bpmnAgent;
     private final ExclusiveGateway gateway;
 
-    public ExclusiveGatewayBehaviour(BpmnAgent bpmnAgent, ExclusiveGateway gateway) {
+    public ExclusiveGatewayBehaviour(BpmnAgent bpmnAgent, ExclusiveGateway gateway)
+    {
         super(bpmnAgent, gateway);
         this.bpmnAgent = bpmnAgent;
         this.gateway = gateway;
@@ -28,21 +29,24 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
     }
 
     @Override
-    protected boolean execute() {
+    protected boolean execute()
+    {
         bpmnAgent.log("Gateway executing: " + gateway.getName() + " (" + gateway.getId() + ')');
         return true;
     }
 
     @Override
-    protected Collection<SequenceFlow> getOutgoing() {
+    protected Collection<SequenceFlow> getOutgoing()
+    {
         SequenceFlow flow = gateway.getOutgoing().stream()
-                .filter(this::isConditionTrue)
+                .filter(this::isFlowConditionTrue)
                 .findFirst()
                 .orElse(gateway.getDefault());
         return Collections.singletonList(flow);
     }
 
-    private boolean isConditionTrue(SequenceFlow sequenceFlow) {
+    private boolean isFlowConditionTrue(SequenceFlow sequenceFlow)
+    {
         ConditionExpression expression = sequenceFlow.getConditionExpression();
         if(expression == null) return false;
 

@@ -3,6 +3,7 @@ package pl.aliberadzki.bpmnagents.behaviours;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
+import org.camunda.bpm.model.bpmn.instance.Message;
 import org.camunda.bpm.model.bpmn.instance.MessageEventDefinition;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
@@ -15,12 +16,12 @@ public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
     private ACLMessage msg = null;
     private String msgId;
 
-    public MsgBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event) {
+    public MsgBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event, Message msg)
+    {
         super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
-        this.msgId = ((MessageEventDefinition)event.getEventDefinitions().iterator().next())
-                .getMessage().getId();
+        this.msgId = msg.getId();
     }
 
     @Override

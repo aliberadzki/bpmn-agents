@@ -3,6 +3,7 @@ package pl.aliberadzki.bpmnagents.actions;
 import pl.aliberadzki.bpmnagents.actions.booktrading.Buy;
 import pl.aliberadzki.bpmnagents.actions.booktrading.CheckPrice;
 import pl.aliberadzki.bpmnagents.actions.booktrading.Reject;
+import pl.aliberadzki.bpmnagents.actions.booktrading.Wait;
 import pl.aliberadzki.bpmnagents.behaviours.TaskBehaviour;
 
 /**
@@ -20,6 +21,9 @@ public class ActionFactory {
 
         if(name.equals("display buy"))
             return new Buy(taskBehaviour);
-        return null;
+
+        if(name.equals("wait"))
+            return new Wait(taskBehaviour);
+        return new Nothing();
     }
 }

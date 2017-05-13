@@ -28,6 +28,12 @@ public abstract class BpmnBehaviour extends Behaviour {
     }
 
     @Override
+    public boolean done()
+    {
+        return this.done;
+    }
+
+    @Override
     public void action()
     {
         if(canRun()) {
@@ -35,7 +41,6 @@ public abstract class BpmnBehaviour extends Behaviour {
             this.done = this.execute();
             if(done) {
                 this.deactivate(flowNode.getIncoming());
-                //TODO filter which should be marked as active?
                 this.activate(getOutgoing());
                 this.afterFinish();
             }
@@ -45,12 +50,6 @@ public abstract class BpmnBehaviour extends Behaviour {
 
     protected Collection<SequenceFlow> getOutgoing() {
         return flowNode.getOutgoing();
-    }
-
-    @Override
-    public boolean done()
-    {
-        return this.done;
     }
 
     protected abstract boolean canRun();

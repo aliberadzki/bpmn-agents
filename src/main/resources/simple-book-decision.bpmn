@@ -11,9 +11,11 @@
   </collaboration>
   <process id="PROCESS_1" isClosed="false" isExecutable="true" processType="None">
     <ioSpecification>
-      <dataInput id="DinPROCESS_1_1" isCollection="false" itemSubjectRef="xsd:string" name="bookTitle"/>
+      <dataInput id="DinPROCESS_1_1" itemSubjectRef="xsd:string" name="bookName"/>
+      <dataInput id="DinPROCESS_1_2" itemSubjectRef="xsd:string" name="bookIsbn"/>
       <inputSet>
         <dataInputRefs>DinPROCESS_1_1</dataInputRefs>
+        <dataInputRefs>DinPROCESS_1_2</dataInputRefs>
       </inputSet>
       <outputSet/>
     </ioSpecification>

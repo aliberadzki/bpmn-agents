@@ -7,7 +7,7 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>SequenceFlow_0kor2g9</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:task id="Task_0lwvu13" name="wait task">
+    <bpmn:task id="Task_0lwvu13" name="wait">
       <bpmn:incoming>SequenceFlow_0kor2g9</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0pgvkl9</bpmn:outgoing>
     </bpmn:task>

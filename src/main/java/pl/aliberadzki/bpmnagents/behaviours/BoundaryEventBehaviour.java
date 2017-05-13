@@ -10,14 +10,16 @@ public abstract class BoundaryEventBehaviour extends BpmnBehaviour implements Ev
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
 
-    public BoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent flowNode) {
+    public BoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent flowNode)
+    {
         super(bpmnAgent, flowNode);
         this.bpmnAgent = bpmnAgent;
         this.event = flowNode;
     }
 
     @Override
-    protected void afterFinish() {
+    protected void afterFinish()
+    {
         if(event.cancelActivity()) {
             bpmnAgent.reactToBoundaryInterrupt(event);
         }

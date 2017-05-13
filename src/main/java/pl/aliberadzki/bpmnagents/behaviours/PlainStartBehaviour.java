@@ -10,7 +10,8 @@ public class PlainStartBehaviour extends BpmnBehaviour {
     private BpmnAgent bpmnAgent;
     private final StartEvent startEvent;
 
-    public PlainStartBehaviour(BpmnAgent bpmnAgent, StartEvent event) {
+    public PlainStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
+    {
         super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.startEvent = event;
@@ -22,7 +23,8 @@ public class PlainStartBehaviour extends BpmnBehaviour {
     }
 
     @Override
-    protected boolean execute() {
+    protected boolean execute()
+    {
         bpmnAgent.log("PLAIN START BEHAVIOUR FINISHED " + startEvent.getId());
         return true;
     }

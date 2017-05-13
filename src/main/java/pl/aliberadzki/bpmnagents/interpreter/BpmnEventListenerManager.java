@@ -11,6 +11,7 @@ import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +35,6 @@ public class BpmnEventListenerManager {
     public void cleanStartEventBehaviours()
     {
         this.startBehaviours.forEach(myAgent::removeBehaviour);
-        //TODO: czy powinienem tutaj kasować wszystkie listenery?
         this.startBehaviours.clear();
     }
 
@@ -70,10 +70,11 @@ public class BpmnEventListenerManager {
 
     public void cancelEventListenersOn(String activityId)
     {
-        this.eventListeners.stream()
+        List<BpmnBehaviour> collect = this.eventListeners.stream()
                 .filter(BoundaryEventBehaviour.class::isInstance)
                 .filter(bpmnBehaviour -> isAttachedTo(activityId, bpmnBehaviour))
-                .forEach(bpmBeh -> cancelEventListener(bpmBeh.getId()));
+                .collect(Collectors.toList());
+        collect.forEach(bpmBeh -> cancelEventListener(bpmBeh.getId()));
     }
 
     private boolean isAttachedTo(String activityId, BpmnBehaviour bpmnBehaviour)

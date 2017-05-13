@@ -14,20 +14,23 @@ public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
     private StartEvent event;
     private ACLMessage msg;
 
-    public MsgStartBehaviour(BpmnAgent bpmnAgent, StartEvent event) {
+    public MsgStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
+    {
         super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
     }
 
     @Override
-    protected boolean canRun() {
+    protected boolean canRun()
+    {
         this.msg = myAgent.receive();
         return this.msg != null;
     }
 
     @Override
-    protected boolean execute() {
+    protected boolean execute()
+    {
         bpmnAgent.log("MSG START BEHAVIOUR FINISHED. msg: " + this.msg.getContent());
         return true;
     }

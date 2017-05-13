@@ -9,8 +9,7 @@ import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
 import pl.aliberadzki.bpmnagents.behaviours.BpmnBehaviour;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 /**
  * Created by aliberadzki on 09.05.2017.
@@ -29,12 +28,13 @@ public class BpmnInterpreter {
     private String bpdName;
     private String participantId;
 
-    public BpmnInterpreter(BpmnAgent bpmnAgent, String bpdName, String participantId)
+    public BpmnInterpreter(BpmnAgent bpmnAgent, String bpdName, String participantId, List paramList)
     {
         this.myAgent = bpmnAgent;
         this.bpdName = bpdName;
         this.participantId = participantId;
         this.eventManager = new BpmnEventListenerManager(bpmnAgent, this.loadProcessDefinition());
+        this.initKnowledge(paramList);
     }
 
     public void markFlowAsActive(Collection<SequenceFlow> sequenceFlows)
@@ -75,10 +75,10 @@ public class BpmnInterpreter {
         this.activityBehaviours.remove(behaviour);
     }
 
-
     public void removeProcessStarters() {
         eventManager.cleanStartEventBehaviours();
     }
+
 
     public void scheduleBoundaryEventsFor(Task task)
     {
@@ -124,6 +124,19 @@ public class BpmnInterpreter {
     public void cancelActivityWithAttachee(BoundaryEvent event)
     {
         cancelBehaviour(event.getAttachedTo().getId());
+    }
+
+    private void initKnowledge(List paramList)
+    {
+        IoSpecification ioSpecification = bpmnProcess.getIoSpecification();
+        if(ioSpecification == null) return;
+        Collection<DataInput> dataInputs = ioSpecification.getDataInputs();
+        Iterator<DataInput> iterator = dataInputs.iterator();
+        for(int i=0; i<paramList.size() && iterator.hasNext(); i++) {
+            String factName = iterator.next().getName();
+            Object factValue = paramList.get(i);
+            myAgent.recognizeFact(factName, factValue);
+        }
     }
 
     private boolean isAttachedTo(Task task, BoundaryEvent boundaryEvent)
