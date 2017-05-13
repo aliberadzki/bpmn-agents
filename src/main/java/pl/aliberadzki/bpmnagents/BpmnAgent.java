@@ -8,16 +8,12 @@ import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.Task;
-import pl.aliberadzki.bpmnagents.knowledge.Belief;
 import pl.aliberadzki.bpmnagents.interpreter.BpmnInterpreter;
 import pl.aliberadzki.bpmnagents.knowledge.Expression;
 import pl.aliberadzki.bpmnagents.knowledge.Knowledge;
 import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by aliberadzki on 04.05.17.
@@ -35,6 +31,10 @@ public class BpmnAgent extends Agent {
         String bpdName = (String) getArguments()[0];
         String participantId = (String) getArguments()[1];
         this.interpreter = new BpmnInterpreter(this, bpdName, participantId);
+
+        //TODO refactor
+        String bookName = (String) getArguments()[2];
+        this.recognizeFact("bookName", bookName);
 
         getContentManager().registerLanguage(codec);
         getContentManager().registerOntology(ontology);
@@ -92,5 +92,10 @@ public class BpmnAgent extends Agent {
     public void reactToBoundaryInterrupt(BoundaryEvent event)
     {
         interpreter.cancelActivityWithAttachee(event);
+    }
+
+    public Object getProcessValue(String expressionString)
+    {
+        return knowledge.factValue(expressionString);
     }
 }

@@ -1,5 +1,6 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
+import org.camunda.bpm.model.bpmn.instance.ConditionExpression;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
@@ -37,15 +38,17 @@ public class ExclusiveGatewayBehaviour extends BpmnBehaviour {
         SequenceFlow flow = gateway.getOutgoing().stream()
                 .filter(this::isConditionTrue)
                 .findFirst()
-                .get();
-        //TODO: or else return default flow
+                .orElse(gateway.getDefault());
         return Collections.singletonList(flow);
     }
 
     private boolean isConditionTrue(SequenceFlow sequenceFlow) {
-        String expression = sequenceFlow.getConditionExpression().getTextContent();
-        Boolean result = bpmnAgent.evaluateExpression(new Expression(expression));
-        bpmnAgent.log("Checking if true: " + expression + " " + result);
+        ConditionExpression expression = sequenceFlow.getConditionExpression();
+        if(expression == null) return false;
+
+        String exprContent = expression.getTextContent();
+        Boolean result = bpmnAgent.evaluateExpression(new Expression(exprContent));
+        bpmnAgent.log("Checking if true: " + exprContent + " " + result);
         return result;
     }
 }

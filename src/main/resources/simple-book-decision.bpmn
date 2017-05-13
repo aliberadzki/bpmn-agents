@@ -41,8 +41,10 @@
       <outgoing>_14</outgoing>
       <ioSpecification>
         <dataInput id="Din_6_1" itemSubjectRef="xsd:string" name="bookName"/>
+        <dataInput id="Din_6_2" itemSubjectRef="xsd:int" name="bookPrice"/>
         <inputSet>
           <dataInputRefs>Din_6_1</dataInputRefs>
+          <dataInputRefs>Din_6_2</dataInputRefs>
         </inputSet>
         <outputSet/>
       </ioSpecification>
@@ -59,9 +61,11 @@
       <incoming>_11</incoming>
       <outgoing>_15</outgoing>
       <ioSpecification>
-        <dataInput id="Din_7_1" isCollection="false" itemSubjectRef="xsd:string" name="bookTitle"/>
+        <dataInput id="Din_7_1" isCollection="false" itemSubjectRef="xsd:string" name="bookName"/>
+        <dataInput id="Din_7_2" itemSubjectRef="xsd:int" name="bookPrice"/>
         <inputSet>
           <dataInputRefs>Din_7_1</dataInputRefs>
+          <dataInputRefs>Din_7_2</dataInputRefs>
         </inputSet>
         <outputSet/>
       </ioSpecification>
