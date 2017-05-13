@@ -9,12 +9,17 @@ import java.util.regex.Pattern;
  * Created by aliberadzki on 09.05.17.
  */
 public class Knowledge {
-    //TODO: use beliefs here
-    private Map<String, Object> facts = new HashMap<>();
+    private Map<String, Belief> beliefs = new HashMap<>();
 
     public void recognizeFact(String key, Object fact)
     {
-        this.facts.put(key, fact);
+        this.recognizeFact(key, fact, "unknown", false);
+    }
+
+    public void recognizeFact(String key, Object fact, String type, boolean isList)
+    {
+        Belief belief = new Belief(key, type, fact, isList);
+        this.beliefs.put(key, belief);
     }
 
     public boolean evaluateExpression(Expression expression)
@@ -28,14 +33,14 @@ public class Knowledge {
         String symbol = matcher.group(2);
         Comparable right = matcher.group(3);
 
-        left = facts.containsKey(left) ? (Comparable) facts.get(left) : Integer.valueOf((String)left);
-        right = facts.containsKey(right) ? (Comparable) facts.get(right) : Integer.valueOf((String)right);
+        left = beliefs.containsKey(left) ? (Comparable) beliefs.get(left).getValue() : Integer.valueOf((String)left);
+        right = beliefs.containsKey(right) ? (Comparable) beliefs.get(right).getValue() : Integer.valueOf((String)right);
 
         return Expression.evaluate(symbol, left, right);
     }
 
     public Object factValue(String expressionString) {
         //TODO: it can be not only variable, but also 2+2..
-        return facts.get(expressionString);
+        return beliefs.get(expressionString).getValue();
     }
 }
