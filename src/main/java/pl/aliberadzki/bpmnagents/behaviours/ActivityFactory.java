@@ -19,6 +19,10 @@ public class ActivityFactory {
                 return new EndEventBehaviour(agent, (EndEvent)flowNode);
             case "exclusiveGateway":
                 return new ExclusiveGatewayBehaviour(agent, (ExclusiveGateway)flowNode);
+            case "sendTask":
+                return new SendTaskBehaviour(agent, (SendTask)flowNode);
+            case "receiveTask":
+                return new ReceiveTaskBehaviour(agent, (ReceiveTask)flowNode);
 
             default:
                 return new EndEventBehaviour(agent, null);

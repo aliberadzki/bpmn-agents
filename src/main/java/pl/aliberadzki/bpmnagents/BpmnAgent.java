@@ -3,6 +3,7 @@ package pl.aliberadzki.bpmnagents;
 import jade.content.lang.Codec;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
+import jade.core.AID;
 import jade.core.Agent;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -102,5 +103,10 @@ public class BpmnAgent extends Agent {
     public Object getProcessValue(String expressionString)
     {
         return knowledge.factValue(expressionString);
+    }
+
+    public Collection<AID> findReciever(String sendTaskId) {
+        Collection<String> receiverIds = interpreter.getReceiversForSender(sendTaskId);
+        return null;
     }
 }

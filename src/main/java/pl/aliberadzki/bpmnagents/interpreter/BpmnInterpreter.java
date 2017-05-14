@@ -27,6 +27,7 @@ public class BpmnInterpreter {
 
     private String bpdName;
     private String participantId;
+    private Collection<MessageFlow> messageFlows;
 
     public BpmnInterpreter(BpmnAgent bpmnAgent, String bpdName, String participantId, List paramList)
     {
@@ -158,6 +159,16 @@ public class BpmnInterpreter {
                 .getAttributeValue("processRef");
 
         bpmnProcess = modelInstance.getModelElementById(processRef);
+        messageFlows = modelInstance.getModelElementsByType(MessageFlow.class);
         return bpmnProcess;
+    }
+
+    public Collection<String> getReceiversForSender(String sendTaskId) {
+        Optional<MessageFlow> messageFlow = messageFlows.stream()
+                .filter(mf -> mf.getTarget().getId().equals(sendTaskId))
+                .findFirst();
+        messageFlow.get().getTarget().getElementType().getTypeName();
+        //TODO finish it
+        return null;
     }
 }
