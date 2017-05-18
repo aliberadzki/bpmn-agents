@@ -116,4 +116,9 @@ public class TaskBehaviour extends BpmnBehaviour {
     {
         this.outputs.forEach((key, value) -> bpmnAgent.recognizeFact(key, ((Belief)value).getValue()));
     }
+
+    protected Map<String, Belief> getInputs()
+    {
+        return this.inputs;
+    }
 }

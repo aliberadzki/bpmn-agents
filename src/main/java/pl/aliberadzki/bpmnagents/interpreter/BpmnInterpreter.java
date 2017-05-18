@@ -1,5 +1,6 @@
 package pl.aliberadzki.bpmnagents.interpreter;
 
+import jade.core.AID;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
@@ -163,12 +164,18 @@ public class BpmnInterpreter {
         return bpmnProcess;
     }
 
-    public Collection<String> getReceiversForSender(String sendTaskId) {
+    public String getParticipantIdForSenderTaskId(String sendTaskId) {
         Optional<MessageFlow> messageFlow = messageFlows.stream()
-                .filter(mf -> mf.getTarget().getId().equals(sendTaskId))
+                .filter(mf -> mf.getSource().getId().equals(sendTaskId))
                 .findFirst();
-        messageFlow.get().getTarget().getElementType().getTypeName();
-        //TODO finish it
-        return null;
+        if(!messageFlow.isPresent()) return null;
+        String pid = ((Process)messageFlow.get().getTarget().getParentElement()).getId();
+        Optional<Participant> participant = this.bpmnProcess
+                .getModelInstance()
+                .getModelElementsByType(Participant.class)
+                .stream()
+                .filter(p -> p.getProcess().getId().equals(pid))
+                .findFirst();
+        return participant.map(BaseElement::getId).orElse(null);
     }
 }

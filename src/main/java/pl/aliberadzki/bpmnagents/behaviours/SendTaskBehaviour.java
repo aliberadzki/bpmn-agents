@@ -1,6 +1,7 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
 import jade.core.AID;
+import jade.lang.acl.ACLMessage;
 import org.camunda.bpm.model.bpmn.instance.SendTask;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
@@ -20,15 +21,13 @@ public class SendTaskBehaviour extends TaskBehaviour {
     }
 
     @Override
-    protected boolean execute() {
-        //TODO send to WHO
-        //TODO send WHAT
-        Collection<AID> receivers = bpmnAgent.findReciever(sendTask.getId());
-        AID receiver = findReceiver("nothing");
+    protected boolean execute()
+    {
+        Collection<AID> receivers = bpmnAgent.findReceivers(sendTask.getId());
+        ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+        msg.setContent(getInputs().keySet().stream().reduce("|", String::concat));
+        receivers.forEach(msg::addReceiver);
+        bpmnAgent.send(msg);
         return super.execute();
-    }
-
-    private AID findReceiver(String id) {
-        return null;
     }
 }

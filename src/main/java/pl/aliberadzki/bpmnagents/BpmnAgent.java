@@ -5,6 +5,10 @@ import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
@@ -14,9 +18,7 @@ import pl.aliberadzki.bpmnagents.knowledge.Expression;
 import pl.aliberadzki.bpmnagents.knowledge.Knowledge;
 import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by aliberadzki on 04.05.17.
@@ -44,6 +46,7 @@ public class BpmnAgent extends Agent {
         String participantId = (String) args[1];
         List<Object> paramList = Arrays.asList(args).subList(2, args.length);
         this.interpreter = new BpmnInterpreter(this, bpdName, participantId, paramList);
+        this.registerService(participantId);
     }
 
     public boolean evaluateExpression(Expression expression)
@@ -105,8 +108,50 @@ public class BpmnAgent extends Agent {
         return knowledge.factValue(expressionString);
     }
 
-    public Collection<AID> findReciever(String sendTaskId) {
-        Collection<String> receiverIds = interpreter.getReceiversForSender(sendTaskId);
-        return null;
+    public Collection<AID> findReceivers(String sendTaskId) {
+        return this.findServiceProviders(interpreter.getParticipantIdForSenderTaskId(sendTaskId));
+    }
+
+    public void registerService(String serviceType)
+    {
+        DFAgentDescription dfd = new DFAgentDescription();
+        dfd.setName(getAID());
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType(serviceType);
+        sd.setName(getLocalName());
+        dfd.addServices(sd);
+        try {
+            DFService.register(this, dfd);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void takeDown() {
+        super.takeDown();
+        try {
+            DFService.deregister(this);
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Collection<AID> findServiceProviders(String serviceType)
+    {
+        DFAgentDescription dfd = new DFAgentDescription();
+        ServiceDescription sd = new ServiceDescription();
+        sd.setType(serviceType);
+        dfd.addServices(sd);
+        Collection<AID> providers = new ArrayList<>();
+        try {
+            DFAgentDescription[] agentDescriptions = DFService.search(this, dfd);
+            for(DFAgentDescription ad : agentDescriptions) {
+                providers.add(ad.getName());
+            }
+        } catch (FIPAException e) {
+            e.printStackTrace();
+        }
+        return providers;
     }
 }
