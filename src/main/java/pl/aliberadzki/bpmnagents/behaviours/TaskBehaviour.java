@@ -67,6 +67,7 @@ public class TaskBehaviour extends BpmnBehaviour {
             throw new RuntimeException("No output named " + name + " defined!");
         }
         out.setValue(value);
+        bpmnAgent.recognizeFact(name,value);
     }
 
     public Object getInput(String name)
@@ -114,7 +115,7 @@ public class TaskBehaviour extends BpmnBehaviour {
 
     private void passTaskOutputsToAgent()
     {
-        this.outputs.forEach((key, value) -> bpmnAgent.recognizeFact(key, ((Belief)value).getValue()));
+        this.outputs.forEach((key, value) -> bpmnAgent.recognizeFact(key, value.getValue()));
     }
 
     protected Map<String, Belief> getInputs()

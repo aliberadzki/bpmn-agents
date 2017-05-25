@@ -24,4 +24,8 @@ public class Belief {
     public void setValue(Object value) {
         this.value = value;
     }
+
+    public String getName() {
+        return name;
+    }
 }

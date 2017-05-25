@@ -16,7 +16,7 @@ public class Buy implements Action {
     @Override
     public boolean execute() {
         String title = (String) taskBehaviour.getInput("bookName");
-        Integer price = (Integer) taskBehaviour.getInput("bookPrice");
+        Integer price = Integer.valueOf((String) taskBehaviour.getInput("bookPrice"));
         taskBehaviour.log("I am going to buy book titled " + title + ". It costs only " + price);
         return true;
     }
