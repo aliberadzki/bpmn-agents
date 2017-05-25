@@ -9,11 +9,9 @@ import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
-import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
-import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
-import org.camunda.bpm.model.bpmn.instance.Task;
+import org.camunda.bpm.model.bpmn.instance.*;
 import pl.aliberadzki.bpmnagents.interpreter.BpmnInterpreter;
+import pl.aliberadzki.bpmnagents.knowledge.Belief;
 import pl.aliberadzki.bpmnagents.knowledge.Expression;
 import pl.aliberadzki.bpmnagents.knowledge.Knowledge;
 import pl.aliberadzki.bpmnagents.ontologies.booktrading.BookTradingOntology;
@@ -108,8 +106,8 @@ public class BpmnAgent extends Agent {
         return knowledge.factValue(expressionString);
     }
 
-    public Collection<AID> findReceivers(String sendTaskId) {
-        return this.findServiceProviders(interpreter.getParticipantIdForSenderTaskId(sendTaskId));
+    public Collection<AID> findReceivers(SendTask sendTask) {
+        return this.findServiceProviders(interpreter.getParticipantIdForSenderTask(sendTask));
     }
 
     public void registerService(String serviceType)
@@ -153,5 +151,22 @@ public class BpmnAgent extends Agent {
             e.printStackTrace();
         }
         return providers;
+    }
+
+    public String getConversationId(Task task)
+    {
+        return interpreter
+                .getMessageFlowForTask(task)
+                .map(BaseElement::getId)
+                .orElse("UNKNOWN");
+    }
+
+    public String generateMsgContentFromInputs(Map<String, Belief> inputs)
+    {
+        return inputs
+                .entrySet()
+                .stream()
+                .map(Knowledge::stringifyBeliefEntry)
+                .reduce(",", String::concat);
     }
 }

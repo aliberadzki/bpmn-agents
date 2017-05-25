@@ -43,4 +43,8 @@ public class Knowledge {
         //TODO: it can be not only variable, but also 2+2..
         return beliefs.get(expressionString).getValue();
     }
+
+    public static String stringifyBeliefEntry(Map.Entry<String, Belief> stringBeliefEntry) {
+        return stringBeliefEntry.getKey() + "=" + stringBeliefEntry.getValue().getValue();
+    }
 }

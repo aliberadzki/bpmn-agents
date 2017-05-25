@@ -1,6 +1,5 @@
 package pl.aliberadzki.bpmnagents.interpreter;
 
-import jade.core.AID;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
@@ -164,12 +163,32 @@ public class BpmnInterpreter {
         return bpmnProcess;
     }
 
-    public String getParticipantIdForSenderTaskId(String sendTaskId) {
-        Optional<MessageFlow> messageFlow = messageFlows.stream()
-                .filter(mf -> mf.getSource().getId().equals(sendTaskId))
-                .findFirst();
+    public String getParticipantIdForSenderTask(Task task) {
+        Optional<MessageFlow> messageFlow = getMessageFlowForTask(task);
         if(!messageFlow.isPresent()) return null;
-        String pid = ((Process)messageFlow.get().getTarget().getParentElement()).getId();
+        String pid = getProcessIdForMessageFlow(messageFlow.get());
+        return getParticipantIdForProcessId(pid);
+//        task(sendTaskId).outgoingMessageFlow().target().process().participant().getId();
+    }
+
+    public Optional<MessageFlow> getMessageFlowForTask(Task task)
+    {
+        //FIXME ugly
+        if(task instanceof ReceiveTask) {
+            return messageFlows.stream()
+                    .filter(mf -> mf.getTarget().getId().equals(task.getId()))
+                    .findFirst();
+        }
+        return messageFlows.stream()
+                .filter(mf -> mf.getSource().getId().equals(task.getId()))
+                .findFirst();
+    }
+
+    private String getProcessIdForMessageFlow(MessageFlow messageFlow) {
+        return ((Process)messageFlow.getTarget().getParentElement()).getId();
+    }
+
+    private String getParticipantIdForProcessId(String pid) {
         Optional<Participant> participant = this.bpmnProcess
                 .getModelInstance()
                 .getModelElementsByType(Participant.class)

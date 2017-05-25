@@ -1,6 +1,7 @@
 package pl.aliberadzki.bpmnagents.behaviours;
 
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.MessageTemplate;
 import org.camunda.bpm.model.bpmn.instance.ReceiveTask;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 
@@ -9,10 +10,12 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  */
 public class ReceiveTaskBehaviour extends TaskBehaviour {
     private BpmnAgent bpmnAgent;
+    private ReceiveTask receiveTask;
 
     public ReceiveTaskBehaviour(BpmnAgent bpmnAgent, ReceiveTask receiveTask) {
         super(bpmnAgent, receiveTask);
         this.bpmnAgent = bpmnAgent;
+        this.receiveTask = receiveTask;
     }
 
     @Override
@@ -21,13 +24,19 @@ public class ReceiveTaskBehaviour extends TaskBehaviour {
     }
 
     @Override
-    protected boolean execute() {
-        ACLMessage message = bpmnAgent.receive();
+    protected boolean execute()
+    {
+        ACLMessage message = bpmnAgent.receive(getMessageTemplate());
         if(message != null) {
             bpmnAgent.log("Odebralem: " + message.getContent());
             return super.execute();
         }
         block();
         return false;
+    }
+
+    private MessageTemplate getMessageTemplate()
+    {
+        return MessageTemplate.MatchConversationId(bpmnAgent.getConversationId(receiveTask));
     }
 }
