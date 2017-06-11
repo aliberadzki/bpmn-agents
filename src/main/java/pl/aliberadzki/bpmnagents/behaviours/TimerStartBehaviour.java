@@ -14,13 +14,16 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
     private long wakeupTime;
     private long period;
     private long blockTime;
+    private long cycles =0;
+    private long plannedCycles;
 
-    public TimerStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
+    public TimerStartBehaviour(BpmnAgent bpmnAgent, StartEvent event, TimerStrategy timerStrategy)
     {
         super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
-        this.period = 20000;
+        this.period = timerStrategy.getPeriod();
+        this.plannedCycles = timerStrategy.repeatCount();
     }
 
     public void onStart()
@@ -39,10 +42,30 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
     }
 
     @Override
+    public void action()
+    {
+        if(canRun()) {
+            this.beforeFinish();
+            this.done = this.execute();
+            if(done) {
+                this.activate(getOutgoing());
+                this.afterFinish();
+            }
+        }
+        else blockBehaviour();
+    }
+
+    @Override
     protected boolean execute()
     {
+        this.cycles++;
         bpmnAgent.log("TIMER START BEHAVIOUR FINISHED");
-        return true;
+        boolean done = this.cycles >= this.plannedCycles;
+        if(!done) {
+            this.onStart();
+            blockBehaviour();
+        }
+        return done;
     }
 
     @Override
@@ -52,6 +75,6 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
 
     @Override
     protected void afterFinish() {
-        bpmnAgent.processStarted();
+        //bpmnAgent.processStartedAndAnotherComing(this);
     }
 }

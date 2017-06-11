@@ -16,8 +16,15 @@ public class CheckPrice implements Action {
     @Override
     public boolean execute() {
         String title = (String) taskBehaviour.getInput("bookName");
-        Integer value = title.equals("Harry Potter") ? 150 : 50;
+        Integer value = getBookPrice(title);
         taskBehaviour.setOutput("bookPrice", value);
         return true;
+    }
+
+    private Integer getBookPrice(String title) {
+        if(title.equals("Harry Potter") ) return 150;
+        if(title.equals("Hunger Games") ) return 110;
+        if(title.equals("50 Shades of Grey") ) return 10;
+        return 50;
     }
 }
