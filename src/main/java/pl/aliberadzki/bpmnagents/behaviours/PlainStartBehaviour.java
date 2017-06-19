@@ -6,31 +6,37 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 06.05.17.
  */
-public class PlainStartBehaviour extends BpmnBehaviour {
+public class PlainStartBehaviour implements StartBehaviour, Activity {
     private BpmnAgent bpmnAgent;
     private final StartEvent startEvent;
 
     public PlainStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
     {
-        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.startEvent = event;
     }
 
     @Override
-    protected boolean canRun() {
+    public boolean isReady()
+    {
         return true;
     }
 
     @Override
-    protected boolean execute()
+    public boolean execute()
     {
         bpmnAgent.log("PLAIN START BEHAVIOUR FINISHED " + startEvent.getId());
         return true;
     }
 
     @Override
-    protected void afterFinish() {
+    public void afterFinish()
+    {
         bpmnAgent.processStarted();
+    }
+
+    @Override
+    public void block(long period) {
+
     }
 }

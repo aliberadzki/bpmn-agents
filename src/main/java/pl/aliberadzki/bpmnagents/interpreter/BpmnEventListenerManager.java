@@ -4,10 +4,7 @@ import org.camunda.bpm.model.bpmn.instance.Event;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
-import pl.aliberadzki.bpmnagents.behaviours.BoundaryEventBehaviour;
-import pl.aliberadzki.bpmnagents.behaviours.BpmnBehaviour;
-import pl.aliberadzki.bpmnagents.behaviours.StartEventFactory;
+import pl.aliberadzki.bpmnagents.behaviours.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,8 +37,9 @@ public class BpmnEventListenerManager {
 
     public void addEventListener(Event event)
     {
-        BpmnBehaviour behaviour = ActivityFactory.create(event, myAgent);
-        if(behaviour == null) return;
+        Activity activity = ActivityFactory.create(event, myAgent);
+        if(activity == null) return;
+        BpmnBehaviour behaviour = new BpmnBehaviour(myAgent, event, activity);
         myAgent.addBehaviour(behaviour);
         this.eventListeners.add(behaviour);
     }
@@ -79,7 +77,9 @@ public class BpmnEventListenerManager {
 
     private boolean isAttachedTo(String activityId, BpmnBehaviour bpmnBehaviour)
     {
-        return ((BoundaryEventBehaviour)bpmnBehaviour).getAttachedToId().equals(activityId);
+        return ((BoundaryEventBehaviour)bpmnBehaviour.getActivity())
+                .getAttachedToId()
+                .equals(activityId);
     }
 
     private Collection<StartEvent> getStartEvents(Process process)
@@ -92,8 +92,9 @@ public class BpmnEventListenerManager {
 
     private void addStartEventListener(StartEvent startEvent)
     {
-        BpmnBehaviour behaviour = StartEventFactory.create(startEvent, myAgent);
-        if(behaviour == null) return;
+        Activity activity = StartEventFactory.create(startEvent, myAgent);
+        if(activity == null) return;
+        BpmnBehaviour behaviour = new BpmnBehaviour(myAgent, startEvent, activity);
         myAgent.addBehaviour(behaviour);
         this.startBehaviours.add(behaviour);
     }

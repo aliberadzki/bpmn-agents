@@ -9,9 +9,9 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 04.05.17.
  */
 public class StartEventFactory {
-    public static BpmnBehaviour create(StartEvent event, BpmnAgent agent)
+    public static Activity create(StartEvent event, BpmnAgent agent)
     {
-        BpmnBehaviour behaviour = null;
+        Activity behaviour = null;
         for(EventDefinition eventDefinition : event.getEventDefinitions()) {
             String eventType = eventDefinition.getElementType().getTypeName();
             if(eventType.equals("messageEventDefinition")) {

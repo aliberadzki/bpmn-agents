@@ -5,6 +5,7 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.behaviours.Activity;
 import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
 import pl.aliberadzki.bpmnagents.behaviours.BpmnBehaviour;
 
@@ -56,8 +57,9 @@ public class BpmnInterpreter {
 
     public void scheduleActivity(FlowNode flowNode)
     {
-        BpmnBehaviour behaviour = ActivityFactory.create(flowNode, myAgent);
-        if(behaviour == null) return;
+        Activity activity = ActivityFactory.create(flowNode, myAgent);
+        if(activity == null) return;
+        BpmnBehaviour behaviour = new BpmnBehaviour(myAgent, flowNode, activity);
         myAgent.addBehaviour(behaviour);
         this.activityBehaviours.add(behaviour);
     }

@@ -10,7 +10,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 07.05.17.
  */
-public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
+public class MsgBoundaryEventBehaviour implements AttachedEventListener {
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
     private ACLMessage msg = null;
@@ -18,24 +18,34 @@ public class MsgBoundaryEventBehaviour extends BoundaryEventBehaviour {
 
     public MsgBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event, Message msg)
     {
-        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.msgId = msg.getId();
     }
 
     @Override
-    protected boolean canRun() {
-        this.msg = myAgent.receive(MessageTemplate.MatchConversationId(msgId));
+    public boolean isReady()
+    {
+        this.msg = bpmnAgent.receive(MessageTemplate.MatchConversationId(msgId));
         return this.msg != null;
     }
 
     @Override
-    protected boolean execute() {
+    public boolean execute() {
         bpmnAgent.log("Boundary event ran! (msg: "
                 + this.msg.getContent()
                 + ") cancelActivity: "
                 + event.cancelActivity());
         return true;
+    }
+
+    @Override
+    public void afterFinish() {
+
+    }
+
+    @Override
+    public void block(long period) {
+
     }
 }

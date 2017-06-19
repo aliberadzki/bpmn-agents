@@ -7,7 +7,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
  * Created by aliberadzki on 05.05.2017.
  */
 public class ActivityFactory {
-    public static BpmnBehaviour create(FlowNode flowNode, BpmnAgent agent)
+    public static Activity create(FlowNode flowNode, BpmnAgent agent)
     {
         String typeName = flowNode.getElementType().getTypeName();
         switch (typeName) {
@@ -29,12 +29,12 @@ public class ActivityFactory {
         }
     }
 
-    private static BpmnBehaviour createTask(FlowNode flowNode, BpmnAgent agent)
+    private static Activity createTask(FlowNode flowNode, BpmnAgent agent)
     {
         return new TaskBehaviour(agent, (Task)flowNode);
     }
 
-    private static BoundaryEventBehaviour createBoundary(BoundaryEvent flowNode, BpmnAgent agent)
+    private static AttachedEventListener createBoundary(BoundaryEvent flowNode, BpmnAgent agent)
     {
         EventDefinition def= flowNode.getEventDefinitions().iterator().next();
         if(isTimerEvent(def)) {

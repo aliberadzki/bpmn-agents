@@ -8,7 +8,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
+public class MsgStartBehaviour  implements Activity, StartBehaviour {
 
     private BpmnAgent bpmnAgent;
     private StartEvent event;
@@ -16,27 +16,29 @@ public class MsgStartBehaviour extends BpmnBehaviour implements StartBehaviour{
 
     public MsgStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
     {
-        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
     }
 
     @Override
-    protected boolean canRun()
-    {
-        this.msg = myAgent.receive();
+    public boolean isReady() {
+        this.msg = bpmnAgent.receive();
         return this.msg != null;
     }
 
     @Override
-    protected boolean execute()
+    public boolean execute()
     {
         bpmnAgent.log("MSG START BEHAVIOUR FINISHED. msg: " + this.msg.getContent());
         return true;
     }
 
-    @Override
-    protected void afterFinish() {
+    public void afterFinish() {
         bpmnAgent.processStarted();
+    }
+
+    @Override
+    public void block(long period) {
+
     }
 }

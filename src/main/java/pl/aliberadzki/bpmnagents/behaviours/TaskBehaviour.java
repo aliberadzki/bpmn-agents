@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by aliberadzki on 05.05.2017.
  */
-public class TaskBehaviour extends BpmnBehaviour {
+public class TaskBehaviour implements Activity {
     private final Action action;
     private BpmnAgent bpmnAgent;
     private Task task;
@@ -26,38 +26,43 @@ public class TaskBehaviour extends BpmnBehaviour {
 
     public TaskBehaviour(BpmnAgent bpmnAgent, Task task)
     {
-        super(bpmnAgent, task);
         this.bpmnAgent = bpmnAgent;
         this.task = task;
         this.action = ActionFactory.makeAction(this, task.getName());
         this.initIO();
     }
 
-    @Override
     public void onStart()
     {
         bpmnAgent.addBoundaryEventsFor(task);
     }
 
-    @Override
-    public int onEnd()
+    public void onEnd()
     {
         bpmnAgent.clearBoundaryEventsFor(task);
         passTaskOutputsToAgent();
-        return super.onEnd();
     }
 
     @Override
-    protected boolean canRun()
-    {
-        return anyIncomingRouteActive();
+    public boolean isReady() {
+        return bpmnAgent.anyIncomingRouteActive(task);
     }
 
     @Override
-    protected boolean execute()
+    public boolean execute()
     {
         bpmnAgent.log("EXECUTION OF TASK " + task.getName() + " (" + task.getId() + ")");
         return action.execute();
+    }
+
+    @Override
+    public void afterFinish() {
+
+    }
+
+    @Override
+    public void block(long period) {
+//        myBehaviour.block(period);
     }
 
     public void setOutput(String name, Object value)

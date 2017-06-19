@@ -26,6 +26,6 @@ public class ExclusiveGatewayBehaviourTest {
         when(myAgent.anyIncomingRouteActive(any())).thenReturn(true);
         ExclusiveGatewayBehaviour behaviour = new ExclusiveGatewayBehaviour(this.myAgent, this.gateway);
         assertTrue(behaviour.execute());
-        assertTrue(behaviour.canRun());
+        assertTrue(behaviour.isReady());
     }
 }

@@ -6,25 +6,37 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 05.05.2017.
  */
-public class EndEventBehaviour extends BpmnBehaviour {
+public class EndEventBehaviour implements Activity {
     private BpmnAgent bpmnAgent;
     private EndEvent endEvent = null;
 
-    public EndEventBehaviour(BpmnAgent bpmnAgent, EndEvent endEvent) {
-        super(bpmnAgent, endEvent);
+    public EndEventBehaviour(BpmnAgent bpmnAgent, EndEvent endEvent)
+    {
         this.bpmnAgent = bpmnAgent;
         this.endEvent = endEvent;
     }
 
     @Override
-    protected boolean canRun() {
-        return this.anyIncomingRouteActive();
+    public boolean isReady()
+    {
+        return bpmnAgent.anyIncomingRouteActive(endEvent);
     }
 
     @Override
-    protected boolean execute() {
+    public boolean execute()
+    {
         bpmnAgent.log("EXECUTION OF END_EVENT " + endEvent.getId());
         return true;
+    }
+
+    @Override
+    public void afterFinish() {
+
+    }
+
+    @Override
+    public void block(long period) {
+
     }
 
 }

@@ -6,7 +6,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour{
+public class TimerStartBehaviour implements StartBehaviour, Activity {
 
     private BpmnAgent bpmnAgent;
     private StartEvent event;
@@ -19,7 +19,6 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
 
     public TimerStartBehaviour(BpmnAgent bpmnAgent, StartEvent event, TimerStrategy timerStrategy)
     {
-        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.period = timerStrategy.getPeriod();
@@ -34,7 +33,7 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
     }
 
     @Override
-    protected boolean canRun()
+    public boolean isReady()
     {
         long currentTime = System.currentTimeMillis();
         this.blockTime = this.wakeupTime - currentTime;
@@ -42,39 +41,26 @@ public class TimerStartBehaviour extends BpmnBehaviour implements StartBehaviour
     }
 
     @Override
-    public void action()
-    {
-        if(canRun()) {
-            this.beforeFinish();
-            this.done = this.execute();
-            if(done) {
-                this.activate(getOutgoing());
-                this.afterFinish();
-            }
-        }
-        else blockBehaviour();
-    }
-
-    @Override
-    protected boolean execute()
+    public boolean execute()
     {
         this.cycles++;
         bpmnAgent.log("TIMER START BEHAVIOUR FINISHED");
         boolean done = this.cycles >= this.plannedCycles;
         if(!done) {
             this.onStart();
-            blockBehaviour();
+            //blockBehaviour();
         }
         return done;
     }
 
     @Override
-    protected void blockBehaviour() {
-        super.block(blockTime);
+    public void afterFinish() {
+
     }
 
     @Override
-    protected void afterFinish() {
-        //bpmnAgent.processStartedAndAnotherComing(this);
+    public void block(long period) {
+
     }
+
 }

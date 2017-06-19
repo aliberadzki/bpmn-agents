@@ -23,12 +23,7 @@ public class ReceiveTaskBehaviour extends TaskBehaviour {
     }
 
     @Override
-    protected boolean canRun() {
-        return super.canRun();
-    }
-
-    @Override
-    protected boolean execute()
+    public boolean execute()
     {
         ACLMessage message = bpmnAgent.receive(getMessageTemplate());
         if(message != null) {
@@ -38,7 +33,6 @@ public class ReceiveTaskBehaviour extends TaskBehaviour {
             beliefs.forEach(belief -> this.setOutput(belief.getName(), belief.getValue()));
             return super.execute();
         }
-        block();
         return false;
     }
 

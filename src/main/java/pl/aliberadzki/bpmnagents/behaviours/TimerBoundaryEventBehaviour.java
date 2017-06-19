@@ -7,7 +7,7 @@ import pl.aliberadzki.bpmnagents.BpmnAgent;
 /**
  * Created by aliberadzki on 07.05.17.
  */
-public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
+public class TimerBoundaryEventBehaviour implements AttachedEventListener {
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
     private final long period;
@@ -17,13 +17,11 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
 
     public TimerBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event, long period)
     {
-        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.period = period;
     }
 
-    @Override
     public void onStart()
     {
         this.startTime = System.currentTimeMillis();
@@ -32,7 +30,7 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
     }
 
     @Override
-    protected boolean canRun()
+    public boolean isReady()
     {
         long currentTime = System.currentTimeMillis();
         this.blockTime = this.wakeupTime - currentTime;
@@ -40,14 +38,23 @@ public class TimerBoundaryEventBehaviour extends BoundaryEventBehaviour {
     }
 
     @Override
-    protected boolean execute()
+    public boolean execute()
     {
         bpmnAgent.log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
         return true;
     }
 
     @Override
-    protected void blockBehaviour() {
-        super.block(blockTime);
+    public void afterFinish() {
+
     }
+
+    @Override
+    public void block(long period) {
+
+    }
+
+//    protected void blockBehaviour() {
+//        super.block(blockTime);
+//    }
 }

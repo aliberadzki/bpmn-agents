@@ -10,21 +10,28 @@ import java.util.Collection;
 /**
  * Created by aliberadzki on 05.05.17.
  */
-public abstract class BpmnBehaviour extends Behaviour {
+public class BpmnBehaviour extends Behaviour {
     private BpmnAgent bpmnAgent;
     private FlowNode flowNode;
+    private Activity activity;
     protected boolean done = false;
 
-    public BpmnBehaviour(BpmnAgent bpmnAgent, FlowNode flowNode)
+    public BpmnBehaviour(BpmnAgent bpmnAgent, FlowNode flowNode, Activity activity)
     {
         super(bpmnAgent);
         this.bpmnAgent = bpmnAgent;
         this.flowNode = flowNode;
+        this.activity = activity;
     }
 
     public String getId()
     {
         return this.flowNode.getId();
+    }
+
+    public Activity getActivity()
+    {
+        return activity;
     }
 
     @Override
@@ -52,13 +59,21 @@ public abstract class BpmnBehaviour extends Behaviour {
         return flowNode.getOutgoing();
     }
 
-    protected abstract boolean canRun();
+    protected boolean canRun()
+    {
+        return activity.isReady();
+    }
 
-    protected abstract boolean execute();
+    protected boolean execute()
+    {
+        return activity.execute();
+    }
 
     protected void beforeFinish() {}
 
-    protected void afterFinish() {}
+    protected void afterFinish() {
+        activity.afterFinish();
+    }
 
     protected void blockBehaviour() {
         this.block();

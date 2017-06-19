@@ -22,7 +22,7 @@ public class SendTaskBehaviour extends TaskBehaviour {
     }
 
     @Override
-    protected boolean execute()
+    public boolean execute()
     {
         ACLMessage msg = createACLMessage();
         bpmnAgent.log("Wysyłam: " + msg.getContent());
