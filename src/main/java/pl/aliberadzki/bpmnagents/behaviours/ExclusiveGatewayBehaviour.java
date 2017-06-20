@@ -4,6 +4,7 @@ import org.camunda.bpm.model.bpmn.instance.ConditionExpression;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
 import pl.aliberadzki.bpmnagents.knowledge.Expression;
 
 import java.util.Collection;
@@ -41,6 +42,16 @@ public class ExclusiveGatewayBehaviour implements Activity {
 
     @Override
     public void block(long period) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onEnd() {
 
     }
 

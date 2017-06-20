@@ -1,13 +1,14 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events.timer;
 
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
-import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.events.AttachedEvent;
+import pl.aliberadzki.bpmnagents.events.AttachedEventListener;
 
 /**
  * Created by aliberadzki on 07.05.17.
  */
-public class TimerBoundaryEventBehaviour implements AttachedEventListener {
+public class TimerAttachedEvent extends AttachedEvent implements AttachedEventListener {
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
     private final long period;
@@ -15,8 +16,9 @@ public class TimerBoundaryEventBehaviour implements AttachedEventListener {
     private long wakeupTime;
     private long blockTime;
 
-    public TimerBoundaryEventBehaviour(BpmnAgent bpmnAgent, BoundaryEvent event, long period)
+    public TimerAttachedEvent(BpmnAgent bpmnAgent, BoundaryEvent event, long period)
     {
+        super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
         this.period = period;
@@ -27,6 +29,11 @@ public class TimerBoundaryEventBehaviour implements AttachedEventListener {
         this.startTime = System.currentTimeMillis();
         this.wakeupTime = this.startTime + this.period;
         this.blockTime = this.wakeupTime - this.startTime;
+    }
+
+    @Override
+    public void onEnd() {
+
     }
 
     @Override

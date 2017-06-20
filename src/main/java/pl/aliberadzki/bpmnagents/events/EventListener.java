@@ -1,4 +1,4 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events;
 
 /**
  * Created by aliberadzki on 07.05.17.

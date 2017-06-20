@@ -1,4 +1,4 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.activities;
 
 import org.camunda.bpm.model.bpmn.instance.DataInput;
 import org.camunda.bpm.model.bpmn.instance.DataOutput;
@@ -16,8 +16,7 @@ import java.util.Map;
 /**
  * Created by aliberadzki on 05.05.2017.
  */
-//TODO RENAME
-public class TaskBehaviour implements Activity {
+public class TaskActivity implements Activity {
     private final Action action;
     private BpmnAgent bpmnAgent;
     private Task task;
@@ -25,7 +24,7 @@ public class TaskBehaviour implements Activity {
     private Map<String, Belief> inputs = new HashMap<>();
     private Map<String, Belief> outputs = new HashMap<>();
 
-    public TaskBehaviour(BpmnAgent bpmnAgent, Task task)
+    public TaskActivity(BpmnAgent bpmnAgent, Task task)
     {
         this.bpmnAgent = bpmnAgent;
         this.task = task;
@@ -33,7 +32,6 @@ public class TaskBehaviour implements Activity {
         this.initIO();
     }
 
-    //TODO that doesnt get fired
     public void onStart()
     {
         bpmnAgent.addBoundaryEventsFor(task);

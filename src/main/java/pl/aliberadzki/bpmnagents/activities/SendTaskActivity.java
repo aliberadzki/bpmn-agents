@@ -1,20 +1,17 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.activities;
 
 import jade.lang.acl.ACLMessage;
 import org.camunda.bpm.model.bpmn.instance.SendTask;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-import pl.aliberadzki.bpmnagents.knowledge.Belief;
-
-import java.util.Map;
 
 /**
  * Created by aliberadzki on 13.05.17.
  */
-public class SendTaskBehaviour extends TaskBehaviour {
+public class SendTaskActivity extends TaskActivity {
     private BpmnAgent bpmnAgent;
     private SendTask sendTask;
 
-    public SendTaskBehaviour(BpmnAgent bpmnAgent, SendTask sendTask)
+    public SendTaskActivity(BpmnAgent bpmnAgent, SendTask sendTask)
     {
         super(bpmnAgent, sendTask);
         this.bpmnAgent = bpmnAgent;

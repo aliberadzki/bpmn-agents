@@ -1,23 +1,23 @@
 package pl.aliberadzki.bpmnagents.actions.booktrading;
 
 import pl.aliberadzki.bpmnagents.actions.Action;
-import pl.aliberadzki.bpmnagents.behaviours.TaskBehaviour;
+import pl.aliberadzki.bpmnagents.activities.TaskActivity;
 
 /**
  * Created by aliberadzki on 13.05.17.
  */
 public class CheckPrice implements Action {
-    private TaskBehaviour taskBehaviour;
+    private TaskActivity taskActivity;
 
-    public CheckPrice(TaskBehaviour taskBehaviour) {
-        this.taskBehaviour = taskBehaviour;
+    public CheckPrice(TaskActivity taskActivity) {
+        this.taskActivity = taskActivity;
     }
 
     @Override
     public boolean execute() {
-        String title = (String) taskBehaviour.getInput("bookName");
+        String title = (String) taskActivity.getInput("bookName");
         Integer value = getBookPrice(title);
-        taskBehaviour.setOutput("bookPrice", value);
+        taskActivity.setOutput("bookPrice", value);
         return true;
     }
 

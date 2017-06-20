@@ -1,4 +1,4 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events.timer;
 
 import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
 

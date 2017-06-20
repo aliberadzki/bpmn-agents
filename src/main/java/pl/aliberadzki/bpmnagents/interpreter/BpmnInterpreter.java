@@ -5,8 +5,8 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
-import pl.aliberadzki.bpmnagents.behaviours.Activity;
-import pl.aliberadzki.bpmnagents.behaviours.ActivityFactory;
+import pl.aliberadzki.bpmnagents.activities.Activity;
+import pl.aliberadzki.bpmnagents.activities.ActivityFactory;
 import pl.aliberadzki.bpmnagents.behaviours.BpmnBehaviour;
 
 import java.io.InputStream;
@@ -203,7 +203,7 @@ public class BpmnInterpreter {
     public void blockBpmnBehaviour(Activity activity, long period)
     {
         BpmnBehaviour bpmnBehaviour = this.activityBehaviours.stream()
-                .filter(b -> b.getActivity().equals(activity))
+                .filter(b -> b.has(activity))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
         bpmnBehaviour.block(period);

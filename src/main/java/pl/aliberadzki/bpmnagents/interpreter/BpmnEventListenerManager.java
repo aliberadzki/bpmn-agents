@@ -4,7 +4,11 @@ import org.camunda.bpm.model.bpmn.instance.Event;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
+import pl.aliberadzki.bpmnagents.activities.ActivityFactory;
 import pl.aliberadzki.bpmnagents.behaviours.*;
+import pl.aliberadzki.bpmnagents.events.AttachedEvent;
+import pl.aliberadzki.bpmnagents.events.StartEventFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,7 +73,7 @@ public class BpmnEventListenerManager {
     public void cancelEventListenersOn(String activityId)
     {
         List<BpmnBehaviour> collect = this.eventListeners.stream()
-                .filter(BoundaryEventBehaviour.class::isInstance)
+                .filter(AttachedEvent.class::isInstance)
                 .filter(bpmnBehaviour -> isAttachedTo(activityId, bpmnBehaviour))
                 .collect(Collectors.toList());
         collect.forEach(bpmBeh -> cancelEventListener(bpmBeh.getId()));
@@ -77,7 +81,7 @@ public class BpmnEventListenerManager {
 
     private boolean isAttachedTo(String activityId, BpmnBehaviour bpmnBehaviour)
     {
-        return ((BoundaryEventBehaviour)bpmnBehaviour.getActivity())
+        return ((AttachedEvent)bpmnBehaviour.getActivity())
                 .getAttachedToId()
                 .equals(activityId);
     }

@@ -1,16 +1,17 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events;
 
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
 
 /**
  * Created by aliberadzki on 06.05.17.
  */
-public class PlainStartBehaviour implements StartBehaviour, Activity {
+public class PlainStartEvent implements StartBehaviour, Activity {
     private BpmnAgent bpmnAgent;
     private final StartEvent startEvent;
 
-    public PlainStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
+    public PlainStartEvent(BpmnAgent bpmnAgent, StartEvent event)
     {
         this.bpmnAgent = bpmnAgent;
         this.startEvent = event;
@@ -37,6 +38,16 @@ public class PlainStartBehaviour implements StartBehaviour, Activity {
 
     @Override
     public void block(long period) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onEnd() {
 
     }
 }

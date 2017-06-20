@@ -1,16 +1,17 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events;
 
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
 
 /**
  * Created by aliberadzki on 05.05.2017.
  */
-public class EndEventBehaviour implements Activity {
+public class PlainEndEvent implements Activity {
     private BpmnAgent bpmnAgent;
     private EndEvent endEvent = null;
 
-    public EndEventBehaviour(BpmnAgent bpmnAgent, EndEvent endEvent)
+    public PlainEndEvent(BpmnAgent bpmnAgent, EndEvent endEvent)
     {
         this.bpmnAgent = bpmnAgent;
         this.endEvent = endEvent;
@@ -36,6 +37,16 @@ public class EndEventBehaviour implements Activity {
 
     @Override
     public void block(long period) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onEnd() {
 
     }
 

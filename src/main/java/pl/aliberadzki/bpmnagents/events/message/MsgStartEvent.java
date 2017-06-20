@@ -1,20 +1,22 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.events.message;
 
 import jade.lang.acl.ACLMessage;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
+import pl.aliberadzki.bpmnagents.events.StartBehaviour;
 
 
 /**
  * Created by aliberadzki on 04.05.17.
  */
-public class MsgStartBehaviour  implements Activity, StartBehaviour {
+public class MsgStartEvent implements Activity, StartBehaviour {
 
     private BpmnAgent bpmnAgent;
     private StartEvent event;
     private ACLMessage msg;
 
-    public MsgStartBehaviour(BpmnAgent bpmnAgent, StartEvent event)
+    public MsgStartEvent(BpmnAgent bpmnAgent, StartEvent event)
     {
         this.bpmnAgent = bpmnAgent;
         this.event = event;
@@ -39,6 +41,16 @@ public class MsgStartBehaviour  implements Activity, StartBehaviour {
 
     @Override
     public void block(long period) {
+
+    }
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onEnd() {
 
     }
 }

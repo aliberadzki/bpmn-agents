@@ -1,4 +1,4 @@
-package pl.aliberadzki.bpmnagents.behaviours;
+package pl.aliberadzki.bpmnagents.activities;
 
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -12,11 +12,11 @@ import java.util.Collection;
 /**
  * Created by aliberadzki on 14.05.17.
  */
-public class ReceiveTaskBehaviour extends TaskBehaviour {
+public class ReceiveTaskActivity extends TaskActivity {
     private BpmnAgent bpmnAgent;
     private ReceiveTask receiveTask;
 
-    public ReceiveTaskBehaviour(BpmnAgent bpmnAgent, ReceiveTask receiveTask) {
+    public ReceiveTaskActivity(BpmnAgent bpmnAgent, ReceiveTask receiveTask) {
         super(bpmnAgent, receiveTask);
         this.bpmnAgent = bpmnAgent;
         this.receiveTask = receiveTask;

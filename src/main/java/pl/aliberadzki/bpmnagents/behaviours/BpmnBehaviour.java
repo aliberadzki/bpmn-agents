@@ -4,6 +4,7 @@ import jade.core.behaviours.Behaviour;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
 
 import java.util.Collection;
 
@@ -29,11 +30,6 @@ public class BpmnBehaviour extends Behaviour {
         return this.flowNode.getId();
     }
 
-    public Activity getActivity()
-    {
-        return activity;
-    }
-
     @Override
     public boolean done()
     {
@@ -53,6 +49,29 @@ public class BpmnBehaviour extends Behaviour {
             }
         }
         else blockBehaviour();
+    }
+
+    @Override
+    public void onStart()
+    {
+        activity.onStart();
+    }
+
+    @Override
+    public int onEnd()
+    {
+        activity.onEnd();
+        return 0;
+    }
+
+    public boolean has(Activity activity)
+    {
+        return this.activity.equals(activity);
+    }
+
+    public Activity getActivity()
+    {
+        return activity;
     }
 
     protected Collection<SequenceFlow> getOutgoing() {
