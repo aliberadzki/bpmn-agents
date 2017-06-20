@@ -16,6 +16,7 @@ import java.util.Map;
 /**
  * Created by aliberadzki on 05.05.2017.
  */
+//TODO RENAME
 public class TaskBehaviour implements Activity {
     private final Action action;
     private BpmnAgent bpmnAgent;
@@ -32,6 +33,7 @@ public class TaskBehaviour implements Activity {
         this.initIO();
     }
 
+    //TODO that doesnt get fired
     public void onStart()
     {
         bpmnAgent.addBoundaryEventsFor(task);
