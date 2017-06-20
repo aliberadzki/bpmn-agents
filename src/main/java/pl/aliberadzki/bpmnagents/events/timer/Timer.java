@@ -18,13 +18,9 @@ public class Timer {
         this.strategy = TimerStrategyFactory.create(eventDefinition);
     }
 
-    public void setStrategy(TimerStrategy strategy)
-    {
-        this.strategy = strategy;
-    }
-
     public void start()
     {
+        System.out.println("Starting the timer. period: " + strategy.getPeriod());
         this.startTime = System.currentTimeMillis();
         this.wakeupTime = this.startTime + strategy.getPeriod();
         this.blockTime = this.wakeupTime - System.currentTimeMillis();

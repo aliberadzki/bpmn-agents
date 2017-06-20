@@ -39,12 +39,12 @@ public class ActivityFactory {
         return new TaskActivity(agent, (Task)flowNode);
     }
 
+    //TODO move to eventFactory ?
     private static AttachedEventListener createBoundary(BoundaryEvent flowNode, BpmnAgent agent)
     {
         EventDefinition def= flowNode.getEventDefinitions().iterator().next();
         if(isTimerEvent(def)) {
-            long period = getTimerLength((TimerEventDefinition) def);
-            return new TimerAttachedEvent(agent, flowNode, period);
+            return new TimerAttachedEvent(agent, flowNode, (TimerEventDefinition) def);
         }
         Message msg = getMessage(flowNode);
         return new MsgAttachedEvent(agent, flowNode, msg);
@@ -56,11 +56,6 @@ public class ActivityFactory {
                 .getEventDefinitions()
                 .iterator().next())
                 .getMessage();
-    }
-
-    private static Long getTimerLength(TimerEventDefinition def)
-    {
-        return Long.valueOf(def.getTimeDuration().getTextContent());
     }
 
     private static boolean isTimerEvent(EventDefinition def)

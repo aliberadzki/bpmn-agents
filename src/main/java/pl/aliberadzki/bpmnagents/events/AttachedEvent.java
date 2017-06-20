@@ -2,11 +2,12 @@ package pl.aliberadzki.bpmnagents.events;
 
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
+import pl.aliberadzki.bpmnagents.activities.Activity;
 
 /**
  * Created by aliberadzki on 07.05.17.
  */
-public abstract class AttachedEvent implements EventListener, AttachedEventListener {
+public abstract class AttachedEvent implements EventListener, AttachedEventListener, Activity {
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
 

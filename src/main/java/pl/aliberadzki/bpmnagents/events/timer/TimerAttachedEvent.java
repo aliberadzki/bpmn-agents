@@ -1,6 +1,7 @@
 package pl.aliberadzki.bpmnagents.events.timer;
 
 import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
+import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
 import pl.aliberadzki.bpmnagents.BpmnAgent;
 import pl.aliberadzki.bpmnagents.events.AttachedEvent;
 import pl.aliberadzki.bpmnagents.events.AttachedEventListener;
@@ -11,24 +12,21 @@ import pl.aliberadzki.bpmnagents.events.AttachedEventListener;
 public class TimerAttachedEvent extends AttachedEvent implements AttachedEventListener {
     private BpmnAgent bpmnAgent;
     private final BoundaryEvent event;
-    private final long period;
-    private long startTime;
-    private long wakeupTime;
-    private long blockTime;
+    private final Timer timer;
 
-    public TimerAttachedEvent(BpmnAgent bpmnAgent, BoundaryEvent event, long period)
+    public TimerAttachedEvent(BpmnAgent bpmnAgent, BoundaryEvent event, TimerEventDefinition timerEventDefinition)
     {
         super(bpmnAgent, event);
         this.bpmnAgent = bpmnAgent;
         this.event = event;
-        this.period = period;
+
+        this.timer = new Timer(timerEventDefinition);
     }
 
     public void onStart()
     {
-        this.startTime = System.currentTimeMillis();
-        this.wakeupTime = this.startTime + this.period;
-        this.blockTime = this.wakeupTime - this.startTime;
+        timer.start();
+        bpmnAgent.log("TIMER BOUNDARY EVENT started " + this.event.getName() + " (" + this.event.getId() + ")");
     }
 
     @Override
@@ -39,29 +37,24 @@ public class TimerAttachedEvent extends AttachedEvent implements AttachedEventLi
     @Override
     public boolean isReady()
     {
-        long currentTime = System.currentTimeMillis();
-        this.blockTime = this.wakeupTime - currentTime;
-        return blockTime <= 0L;
+        return timer.ticked();
     }
 
     @Override
     public boolean execute()
     {
+        timer.tick();
         bpmnAgent.log("TIMER BOUNDARY EVENT FIRED " + this.event.getName() + " (" + this.event.getId() + ")");
-        return true;
-    }
-
-    @Override
-    public void afterFinish() {
-
+        boolean done = timer.isDone();
+        if(!done) {
+            this.onStart();
+            //blockBehaviour();
+        }
+        return done;
     }
 
     @Override
     public void block(long period) {
-
+        bpmnAgent.blockBehaviour(this, period);
     }
-
-//    protected void blockBehaviour() {
-//        super.block(blockTime);
-//    }
 }

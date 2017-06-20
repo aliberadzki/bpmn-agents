@@ -3,6 +3,7 @@ package pl.aliberadzki.bpmnagents.events.timer;
 import org.camunda.bpm.model.bpmn.instance.TimerEventDefinition;
 
 import java.time.Duration;
+import java.time.format.DateTimeParseException;
 
 /**
  * Created by aliberadzki on 11.06.17.
@@ -34,7 +35,13 @@ public class TimerStrategyFactory {
 
     private static long parsePeriod(String[] intervalStr)
     {
-        if(intervalStr.length == 1) return Duration.parse(intervalStr[0]).getSeconds()*1000;
-        return Duration.parse(intervalStr[1]).getSeconds()*1000;
+        try {
+            if (intervalStr.length == 1) return Duration.parse(intervalStr[0]).getSeconds() * 1000;
+            return Duration.parse(intervalStr[1]).getSeconds() * 1000;
+        }
+        catch(DateTimeParseException e) {
+            //fixme: hack. ugly
+            return 1;
+        }
     }
 }
