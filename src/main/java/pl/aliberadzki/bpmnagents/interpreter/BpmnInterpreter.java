@@ -199,4 +199,13 @@ public class BpmnInterpreter {
                 .findFirst();
         return participant.map(BaseElement::getId).orElse(null);
     }
+
+    public void blockBpmnBehaviour(Activity activity, long period)
+    {
+        BpmnBehaviour bpmnBehaviour = this.activityBehaviours.stream()
+                .filter(b -> b.getActivity().equals(activity))
+                .findFirst()
+                .orElseThrow(RuntimeException::new);
+        bpmnBehaviour.block(period);
+    }
 }

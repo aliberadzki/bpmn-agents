@@ -19,6 +19,7 @@ public class Wait implements Action {
 
     @Override
     public boolean execute() {
+        taskBehaviour.log("WAITING ACTION STARTED");
         long current = System.currentTimeMillis();
         if(wakeupTime < 0L) {
             this.wakeupTime = current + period;
@@ -29,7 +30,7 @@ public class Wait implements Action {
             taskBehaviour.block(wakeupTime - current);
             return false;
         }
-        taskBehaviour.log("WAITING TASK FINISHED");
+        taskBehaviour.log("WAITING ACTION FINISHED");
         return true;
     }
 }

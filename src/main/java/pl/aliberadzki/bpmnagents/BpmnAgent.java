@@ -10,6 +10,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import org.camunda.bpm.model.bpmn.instance.*;
+import pl.aliberadzki.bpmnagents.behaviours.*;
+import pl.aliberadzki.bpmnagents.behaviours.Activity;
 import pl.aliberadzki.bpmnagents.interpreter.BpmnInterpreter;
 import pl.aliberadzki.bpmnagents.knowledge.Belief;
 import pl.aliberadzki.bpmnagents.knowledge.Expression;
@@ -168,5 +170,9 @@ public class BpmnAgent extends Agent {
                 .stream()
                 .map(Knowledge::stringifyBeliefEntry)
                 .reduce(",", String::concat);
+    }
+
+    public void blockBehaviour(Activity activity, long period) {
+        this.interpreter.blockBpmnBehaviour(activity, period);
     }
 }

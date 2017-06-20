@@ -47,7 +47,10 @@ public class ActivityFactory {
 
     private static Message getMessage(BoundaryEvent flowNode)
     {
-        return ((MessageEventDefinition)flowNode.getEventDefinitions().iterator().next()).getMessage();
+        return ((MessageEventDefinition)flowNode
+                .getEventDefinitions()
+                .iterator().next())
+                .getMessage();
     }
 
     private static Long getTimerLength(TimerEventDefinition def)

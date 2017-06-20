@@ -61,8 +61,9 @@ public class TaskBehaviour implements Activity {
     }
 
     @Override
-    public void block(long period) {
-//        myBehaviour.block(period);
+    public void block(long period)
+    {
+        bpmnAgent.blockBehaviour(this, period);
     }
 
     public void setOutput(String name, Object value)

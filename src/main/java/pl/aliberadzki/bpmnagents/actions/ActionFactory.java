@@ -22,7 +22,7 @@ public class ActionFactory {
         if(name.equals("display buy") || name.equals("kup"))
             return new Buy(taskBehaviour);
 
-        if(name.equals("wait"))
+        if(name.contains("wait"))
             return new Wait(taskBehaviour);
         return new Nothing();
     }
